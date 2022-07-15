@@ -9,7 +9,6 @@ const userController = require("./user.controller")
  *  /api/user/users:
  *    get:
  *      summary: "유저 데이터 전체조회"
- *      description: "서버에 데이터를 보내지 않고 Get방식으로 요청"
  *      tags: [Users]
  *      responses:
  *        "200":
@@ -19,17 +18,15 @@ const userController = require("./user.controller")
  *              schema:
  *                type: object
  *                properties:
- *                    ok:
- *                      type: boolean
  *                    users:
  *                      type: object
  *                      example:
  *                          [
- *                            { "id": 1, "name": "유저1" },
- *                            { "id": 2, "name": "유저2" },
- *                            { "id": 3, "name": "유저3" },
+ *                            { name: "김응진", age: 18, rate: 5.0, birth: "2005.06.25", id: "1111111" },
+ *                            { name: "김홍록", age: 18, rate: 5.0, birth: "2005.01.01", id: "2222222" },
+ *                            { name: "박태진", age: 18, rate: 5.0, birth: "2005.04.16", id: "3333333" }
  *                          ]
  */
-userRouter.get("/users", userController.getUsers)
+userRouter.get("/users", userController.getAllUsers)
 
 module.exports = userRouter
