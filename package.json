@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "run": "node index.js",
-    "test": "npm run --watch"
+    "test": "node index.js --watch"
   },
   "repository": {
     "type": "git",
