@@ -2,8 +2,7 @@
 
 module.exports = {
     getInfo: function(req,res){
-        res.send(req.body);
-        console.log(req.params);
+        console.log(req.query.id);
     },
     getAllStores: function(req, res){
         console.log("!");

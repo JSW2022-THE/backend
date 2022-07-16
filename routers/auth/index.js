@@ -11,16 +11,17 @@ const authController = require("./auth.controller")
  *        tags: [Auth]
  *        produces:
  *        - application/json
- *        parameters:
- *          - in: body
- *            name: token
- *            required: true
- *            schema:
- *              type: object
- *              description: token
- *              properties:
- *                token:
- *                  type: string
+ *        requestBody:
+ *          x-name: body
+ *          required: true
+ *          content:
+ *            application/json:
+ *              schema:
+ *                required:
+ *                  token
+ *                properties:
+ *                  token:
+ *                    type: string
  *        responses:
  *         200:
  *          description: access token과 refresh token 반환
