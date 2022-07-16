@@ -79,6 +79,7 @@ module.exports = {
                     subject: 'refresh_token'
                 })
                 if (isNewUser == true) {
+                    user_token_data.token_id = token_uuid
                     await Token.create(user_token_data)
                 } else {
                     await Token.update({
