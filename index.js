@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const port = 3000;
+const port = 2000;
 const api = require("./routers")
 const { swaggerUi, specs } = require("./swagger/swagger");
 const db = require("./models");
@@ -20,5 +20,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log("jswcup2022 backend is running on port 3000\n");
+    console.log("jswcup2022 backend is running on port 2000\n");
 });
