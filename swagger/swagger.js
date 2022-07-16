@@ -14,11 +14,11 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:3000", // 요청 URL
+        url: "http://localhost:2000", // 요청 URL
       },
     ],
   },
-  apis: ["./routers/*.js", "./routers/user/*.js", "./routers/store/*.js"], //Swagger 파일 연동
+  apis: ["./routers/*.js", "./routers/user/*.js", "./routers/store/*.js", "./routers/auth/*.js"], //Swagger 파일 연동
 }
 const specs = swaggereJsdoc(options)
 

@@ -6,4 +6,4 @@
 npm run test
 ```
 
-Using swagger, check out  http://localhost:3000
+Using swagger, check out  http://localhost:2000/api-docs

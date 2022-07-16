@@ -3,7 +3,7 @@
 module.exports = {
     getInfo: function(req,res){
         res.send(req.body);
-        console.log(req.params.storeId);
+        console.log(req.params);
     },
     getAllStores: function(req, res){
         console.log("!");

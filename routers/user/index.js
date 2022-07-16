@@ -9,7 +9,7 @@ const userController = require("./user.controller")
  *  /api/user/users:
  *    get:
  *      summary: "유저 데이터 전체조회"
- *      tags: [Users]
+ *      tags: [User]
  *      responses:
  *        "200":
  *          description: 전체 유저 정보
