@@ -6,22 +6,22 @@ const auth = require('./auth')
 /**
  * @swagger
  * tags:
- *   name: Users
+ *   name: User
  *   description: 유저 추가 수정 삭제 조회
  */
 router.use("/user", user)
 
 /**
  * @swagger
- * tages:
- *  name: Stores
+ * tags:
+ *  name: Store
  *  description: 가게 추가 수정 삭제 조회
  */
 router.use("/store", store)
 
 /**
  * @swagger
- * tages:
+ * tags:
  *  name: Auth
  *  description: 사용자 인증
  */

@@ -2,8 +2,40 @@
 const authRouter = require("express").Router()
 const authController = require("./auth.controller")
 
-// swagger 작성 예정
-
+/**
+ * @swagger
+ * paths:
+ *  /api/auth/login:
+ *      post:
+ *        summary: "소셜 로그인"
+ *        tags: [Auth]
+ *        produces:
+ *        - application/json
+ *        parameters:
+ *          - in: body
+ *            name: token
+ *            required: true
+ *            schema:
+ *              type: object
+ *              description: token
+ *              properties:
+ *                token:
+ *                  type: string
+ *        responses:
+ *         200:
+ *          description: access token과 refresh token 반환
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  access_token:
+ *                    type: string
+ *                  refresh_token:
+ *                    type: string
+ *         404:
+ *           description: 잘못된 token
+ */
 authRouter.post("/login", authController.login)
 
 module.exports = authRouter

@@ -9,7 +9,7 @@ const storeController = require("./store.controller")
  *  /api/store/stores:
  *    get:
  *      summary: "가게 데이터 전체조회"
- *      tags: [Stores]
+ *      tags: [Store]
  *      responses:
  *        "200":
  *          description: 전체 가게 정보
@@ -35,7 +35,7 @@ const storeController = require("./store.controller")
  *  /api/store/getInfo:
  *      get:
  *        summary: "가게 데이터 조회"
- *        tags: [Stores]
+ *        tags: [Store]
  *        produces:
  *        - application/json
  *        parameters:
@@ -53,14 +53,14 @@ const storeController = require("./store.controller")
  *              schema:
  *                type: object
  *                properties:
- *                      data:
- *                        type: object
- *                        example:
- *                          {
- *                            name: "태진마라탕",
- *                            location: "충청북도 청주시 상당구 월평로238번길 3-10 (용암동)",
- *                            rate: 4.5,
- *                            id: 223545135
+ *                    stores:
+ *                      type: object
+ *                      example:
+ *                        {
+ *                          "name": "태진마라탕",
+ *                          "location": "충청북도 청주시 상당구 월평로238번길 3-10 (용암동)",
+ *                          "rate": 4.5,
+ *                          "id": 223545135
  *                        }
  *         404:
  *           description: 잘못된 가게 id
