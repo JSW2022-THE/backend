@@ -4,12 +4,14 @@ const port = 2000;
 const api = require("./routers")
 const { swaggerUi, specs } = require("./swagger/swagger");
 const db = require("./models");
+const cookieParser = require("cookie-parser");
 
 db.sequelize.sync(); // sequelize init
 
 //Express 4.16.0버전 부터 body-parser의 일부 기능이 익스프레스에 내장 body-parser 연결
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser())
 
 app.use("/api", api);
 
