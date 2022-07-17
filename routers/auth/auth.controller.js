@@ -48,7 +48,7 @@ module.exports = {
                     kakao_access: kakao_access_token,
                     kakao_refresh: kakao_refresh_token,
                     user_uuid: '',
-                    token_id: '',
+                    token_uuid: '',
                 }
                 if (findUserInDB == undefined) { // 유저가 없을 시 생성
                     let user_uuid = uuid.v4()
@@ -79,7 +79,7 @@ module.exports = {
                     subject: 'refresh_token'
                 })
                 if (isNewUser == true) {
-                    user_token_data.token_id = token_uuid
+                    user_token_data.token_uuid = token_uuid
                     await Token.create(user_token_data)
                 } else {
                     await Token.update({
