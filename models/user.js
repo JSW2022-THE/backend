@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     agree_terms_of_service: {
       type: DataTypes.BOOLEAN,
-      default: false
+      defaultValue: false
     },
     age: DataTypes.INTEGER,
   }, {
