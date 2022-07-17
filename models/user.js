@@ -17,6 +17,11 @@ module.exports = (sequelize, DataTypes) => {
     kakao_id: {type:DataTypes.BIGINT, primaryKey: true},
     uuid: DataTypes.STRING,
     name: DataTypes.STRING,
+    agree_terms_of_service: {
+      type: DataTypes.BOOLEAN,
+      default: false
+    },
+    age: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'User',
