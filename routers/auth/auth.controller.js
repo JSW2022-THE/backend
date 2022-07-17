@@ -24,7 +24,6 @@ module.exports = {
             responseType: 'json'
         })
             .then(async (token)=>{
-                console.log(token.data)
                 const kakao_access_token = token.data.access_token
                 const kakao_refresh_token = token.data.refresh_token
                 let userData = await axios({
