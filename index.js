@@ -6,6 +6,7 @@ const { swaggerUi, specs } = require("./swagger/swagger");
 const db = require("./models");
 const cookieParser = require("cookie-parser");
 const cors = require('cors')
+const jwt = require('jsonwebtoken')
 
 db.sequelize.sync(); // sequelize init
 
@@ -24,7 +25,26 @@ let corsOptions = {
 }
 app.use(cors(corsOptions));
 
-app.use("/api", api);
+// req.isAuth 값이 true면 로그인한 상태
+const isAuth = async (req, res, next) => {
+    if (req.cookies.access_token) {
+        // 토큰 검증
+        await jwt.verify(req.cookies.access_token, process.env.JWT_ACCESS_SECRET, (err,tokenInfo)=> {
+            if(err) {
+                req.isAuth = false
+            } else {
+                req.isAuth = true
+                req.userUuid = tokenInfo.user_uuid
+            }
+        })
+        next()
+    } else {
+        req.isAuth = false
+        next()
+    }
+}
+
+app.use("/api", isAuth,api);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
