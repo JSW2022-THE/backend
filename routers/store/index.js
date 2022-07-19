@@ -22,9 +22,9 @@ const storeController = require("./store.controller")
  *                      type: object
  *                      example:
  *                          [
- *                            { name: "태진마라탕", rate: 5.0, location: "충청북도 청주시 상당구 로로로", id: "11111112" },
- *                            { name: "태진마라샹궈", rate: 5.0, location: "충청북도 청주시 구구구 로로로", id: "22222223" },
- *                            { name: "태진마라마라", rate: 5.0, location: "충청북도 청청청 구구구 로로로", id: "33333334" }
+ *                            { name: "태진마라탕", rate: 100, text_location: "충청북도 청주시 상당구 로로로", lat: 36.63010046569394, lon: 127.51671854407965, description: "미래를 만들어 나가는 가게"},
+ *                            { name: "태진마라샹궈", rate: 80, text_location: "충청북도 청주시 구구구 로로로", lat: 36.62730948983622, lon: 127.51195958283104, description: "마라를 만들어 나가는 가게"},
+ *                            { name: "태진마라마라", rate: 7777777, text_location: "충청북도 청청청 구구구 로로로", lat: 36.62730948983622, lon: 127.51195958283104, description: "마라만 만들어 나가는 가게"}
  *                          ]
  */
  storeRouter.get("/stores", storeController.getAllStores)
@@ -57,10 +57,12 @@ const storeController = require("./store.controller")
  *                      type: object
  *                      example:
  *                        {
- *                          "name": "태진마라탕",
- *                          "location": "충청북도 청주시 상당구 월평로238번길 3-10 (용암동)",
- *                          "rate": 4.5,
- *                          "id": 223545135
+ *                          name: "태진마라탕", 
+ *                          rate: 100, 
+ *                          text_location: "충청북도 청주시 상당구 로로로", 
+ *                          lat: 36.63010046569394, 
+ *                          lon: 127.51671854407965, 
+ *                          description: "미래를 만들어 나가는 가게"
  *                        }
  *         404:
  *           description: 잘못된 가게 id
