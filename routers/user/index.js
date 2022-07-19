@@ -22,9 +22,9 @@ const userController = require("./user.controller")
  *                      type: object
  *                      example:
  *                          [
- *                            { name: "김응진", age: 18, rate: 5.0, birth: "2005.06.25", id: "1111111" },
- *                            { name: "김홍록", age: 18, rate: 5.0, birth: "2005.01.01", id: "2222222" },
- *                            { name: "박태진", age: 18, rate: 5.0, birth: "2005.04.16", id: "3333333" }
+ *                            {kakao_id: "BIGINT", uuid: "VARCHAR", name: "김응진", agree_terms_of_service: "TINYINT", age: "INT", createdAt: 2022-07-17 06:44:40, updatedAt: 2022-07-17 06:44:40},
+ *                            {kakao_id: "BIGINT", uuid: "VARCHAR", name: "김홍록", agree_terms_of_service: "TINYINT", age: "INT", createdAt: 2022-07-17 06:44:40, updatedAt: 2022-07-17 06:44:40},
+ *                            {kakao_id: "BIGINT", uuid: "VARCHAR", name: "박태진", agree_terms_of_service: "TINYINT", age: "INT", createdAt: 2022-07-17 06:44:40, updatedAt: 2022-07-17 06:44:40},
  *                          ]
  */
 userRouter.get("/users", userController.getAllUsers)
