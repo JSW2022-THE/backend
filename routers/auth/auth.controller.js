@@ -96,7 +96,18 @@ module.exports = {
                     access_token: access_token,
                     refresh_token: refresh_token
                 }
-                return res.json(res_data)
+                res.cookie('access_token', access_token, {
+                    httpOnly: true,
+                    maxAge: 1000 * 60 * 60 * 6, // 6시간
+                    path: '/'
+                })
+                res.cookie('refresh_token', refresh_token, {
+                    httpOnly: true,
+                    maxAge: 1000 * 60 * 60 * 24 * 14, // 14일
+                })
+                res.json(res_data)
+                res.end()
+                return
 
             })
             .catch((error)=>{
