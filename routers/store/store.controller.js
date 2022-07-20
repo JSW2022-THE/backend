@@ -6,5 +6,8 @@ module.exports = {
     },
     getAllStores: function(req, res){
         console.log("!");
+    },
+    add : function(req, res){
+        console.log("!");
     }
 }

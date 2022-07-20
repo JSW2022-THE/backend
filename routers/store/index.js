@@ -69,4 +69,47 @@ const storeController = require("./store.controller")
  */
 storeRouter.get("/getInfo", storeController.getInfo)
 
+/**
+ * @swagger
+ * paths:
+ *  /api/store/add:
+ *      post:
+ *        summary: "가게 정보 첫 추가"
+ *        tags: [Store]
+ *        produces:
+ *        - application/json
+ *        requestBody:
+ *          x-name: body
+ *          required: true
+ *          content:
+ *            application/json:
+ *              schema:
+ *                required:
+ *                  - name
+ *                  - lat
+ *                  - lon
+ *                  - description
+ *                  - heart
+ *                  - address
+ *                properties:
+ *                  name:
+ *                    type: string
+ *                  lat:
+ *                    type: number
+ *                  lon:
+ *                    type: number
+ *                  description:
+ *                    type: string
+ *                  heart:
+ *                    type: integer
+ *                  address:
+ *                    type: string 
+ *        responses:
+ *         200:
+ *          description: 성공시 response code 200
+ *         404:
+ *           description: 잘못된 데이터 혹은 빈 데이터
+ */
+storeRouter.post("/add", storeController.add)
+
 module.exports = storeRouter
