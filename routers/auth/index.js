@@ -38,5 +38,7 @@ const authController = require("./auth.controller")
  *           description: 잘못된 token
  */
 authRouter.post("/login", authController.login)
+authRouter.get("/check/tos", authController.getTosCheck)
+authRouter.post("/new/user", authController.setNewUserData)
 
 module.exports = authRouter

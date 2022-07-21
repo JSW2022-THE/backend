@@ -4,7 +4,71 @@ const uuid = require('uuid')
 const jwt = require('jsonwebtoken')
 
 module.exports = {
+
+    setNewUserData: async function (req,res) {
+        if (!req.isAuth) { // 로그인 필수
+            return res.json({
+                message: '요청을 처리하는 중 오류가 발생하였습니다.'
+            })
+        }
+        function getAge(dateString) { // thanks for stackoverflow
+            let today = new Date();
+            let birthDate = new Date(dateString);
+            let age = today.getFullYear() - birthDate.getFullYear();
+            let m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age;
+        }
+        let data = req.body
+        let name = data.name
+        let birth = data.dateOfBirth
+        birth = birth.split('T')[0]
+        if (data.agree_terms == true && name.length > 1 && birth.length >= 8 && ( data.type == 'teenager' || data.type == 'adult' ) ) {
+            await User.update({
+                name: name,
+                age: getAge(birth),
+                category: data.type,
+                agree_terms_of_service: data.agree_terms,
+            }, {
+                where: {
+                    uuid: req.userUuid
+                }
+            })
+            return res.json({
+                status: 'success',
+                message: '요청을 정상적으로 처리하였습니다.'
+            })
+        } else {
+            return res.json({
+                message: '요청을 처리하는 중 오류가 발생하였습니다.'
+            })
+        }
+    },
+
+    getTosCheck: async function (req, res) {
+        // 사용자가 처음이용하는 사람인지 구분, 이용약관 동의, 필수정보 입력을 위함
+        if (!req.isAuth) { // 로그인 필수
+            return res.json({
+                message: '요청을 처리하는 중 오류가 발생하였습니다.'
+            })
+        }
+        let isUserAgreeTermsAndUserInfo = await User.findOne({
+            where: {
+                uuid: req.userUuid
+            },
+            attributes: ['name', 'agree_terms_of_service']
+        })
+        return res.json({
+            name: isUserAgreeTermsAndUserInfo.name,
+            agree_tos: isUserAgreeTermsAndUserInfo.agree_terms_of_service
+        })
+
+    },
+
     login: async function (req, res) {
+        console.log(req.isAuth)
         const token = req.body.token
         if (token == undefined || token == '') {
             return res.json({message: '요청을 처리하는 중 오류가 발생하였습니다.'})

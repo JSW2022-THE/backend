@@ -31,6 +31,7 @@ const isAuth = async (req, res, next) => {
         // 토큰 검증
         await jwt.verify(req.cookies.access_token, process.env.JWT_ACCESS_SECRET, (err,tokenInfo)=> {
             if(err) {
+                console.log(err)
                 req.isAuth = false
             } else {
                 req.isAuth = true

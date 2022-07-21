@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: false
     },
     age: DataTypes.INTEGER,
+    category: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'User',
