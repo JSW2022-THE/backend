@@ -35,9 +35,12 @@ module.exports = {
     },
     getNearBy: async function (req, res) {
         var flag = true;
+        var favoriteDistance = 1.0;    // 기본 1km
         var nearByStoresContainer = new Array();
 
         if (req.query.lat == undefined || req.query.lon == undefined) flag = false;
+        if (req.query.dis != undefined) favoriteDistance = req.query.dis;
+        
 
         if (flag) {
             let userLat = Number(req.query.lat);
@@ -56,7 +59,7 @@ module.exports = {
                     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
                     var d = 6371 * c;
 
-                    if (d < 1.0) {
+                    if (d < favoriteDistance) {
                         nearByStoresContainer.push(data);
                     }
                 });
