@@ -21,17 +21,15 @@ module.exports = {
         res.json({ message: "알 수 없는 오류가 발생했습니다." });
       });
   },
-  getInfoByOwnerId: (req, res) => {
-    const userAccessToken = req.cookies.access_token;
-    const decoded = jwt.decode(userAccessToken);
-    const user_uuid = decoded.user_uuid;
+  getInfoByOwnerId: function (req, res) {
     Store.findAll({
-      where: { owner_uuid: user_uuid },
-    }).then((result) => {
+      where: { owner_uuid: jwt.decode(req.cookies.access_token) },
+    }).then(function (result) {
       if (result != null) {
         res.json(result.dataValues);
       } else {
-        res.status(404).json({ message: "존재하지 않는 가게입니다." });
+        res.status(404);
+        res.json({ message: "존재하지 않는 가게입니다." });
       }
     });
   },
@@ -44,8 +42,78 @@ module.exports = {
         res.status(404);
       });
   },
-  add: async function (req, res) {
-    console.log("DODODODODODODO");
+  registration: async function (req, res) {
+
+    if (!req.isAuth) { // 로그인 필수
+      return res.json({
+        message: '요청을 처리하는 중 오류가 발생하였습니다.'
+      });
+    }
+
+
+    var flag = true;
+
+    if (req.body.name == "" || req.body.lat == "" || req.body.lon == "" || req.body.description == "" || req.body.address == "" ||
+      req.body.name == undefined || req.body.lat == undefined || req.body.lon == undefined || req.body.description == undefined || req.body.address == undefined) {
+      res.status(400);
+      res.json({ message: "입력값중 일부가 비어있거나 잘못되어있습니다." });
+      flag = false;
+    }
+
+    if (flag) {
+      const dbReqRes = await Store.findOne({
+        where: {
+          owner_uuid: req.body.userUuid
+        }
+      });
+
+      if (dbReqRes == undefined) { // 처음 가게 정보 작성시
+        await Store.create({
+          name: req.body.name,
+          lat: req.body.lat,
+          lon: req.body.lon,
+          description: req.body.description,
+          heart: 0,
+          address: req.body.address,
+          owner_uuid: req.body.userUuid
+        });
+        res.status(200);
+        res.json({ message: "요청이 잘 수행되었습니다." });
+      } else { // 이미 존재하는 가게였다면
+        var dbReqData = {
+          name: dbReqRes.dataValues.name,
+          lat: dbReqRes.dataValues.lat,
+          lon: dbReqRes.dataValues.lon,
+          description: dbReqRes.dataValues.description,
+          address: dbReqRes.dataValues.address,
+          owner_uuid: dbReqRes.dataValues.userUuid
+        }
+
+        if (dbReqRes.dataValues.name != req.body.name)
+          dbReqData.name = req.body.name;
+
+        if (dbReqRes.dataValues.lat != req.body.lat)
+          dbReqData.lat = req.body.lat;
+
+        if (dbReqRes.dataValues.lon != req.body.lon)
+          dbReqData.lon = req.body.lon;
+
+        if (dbReqRes.dataValues.description != req.body.description)
+          dbReqData.description = req.body.description;
+
+        if (dbReqRes.dataValues.address != req.body.address)
+          dbReqData.address = req.body.address;
+
+        await Store.update(dbReqData,
+          {
+            where: {
+              owner_uuid: req.body.userUuid
+            }
+          });
+        res.status(200);
+        res.json({ message: "요청이 잘 수행되었습니다." });
+      }
+    }
   },
   getNearBy: async function (req, res) {
     var flag = true;
@@ -83,7 +151,7 @@ module.exports = {
     await res.json(nearByStoresContainer);
   },
   addHeart: async function (req, res) {
-    if (req.isAuth) { // 로그인 필수
+    if (!req.isAuth) { // 로그인 필수
       return res.json({
         message: '요청을 처리하는 중 오류가 발생하였습니다.'
       });

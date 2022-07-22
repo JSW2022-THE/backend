@@ -54,5 +54,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log("jswcup2022 backend is running on port 2000\n");
+    console.log("jswcup2022 backend is running on port 2000\nSwagger는 완전히 작성된 상태가 아닙니다.\n\n");
 });

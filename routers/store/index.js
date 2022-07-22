@@ -74,7 +74,7 @@ storeRouter.get("/getInfoByOwnerId", storeController.getInfoByOwnerId);
 /**
  * @swagger
  * paths:
- *  /api/store/add:
+ *  /api/store/registration:
  *      post:
  *        summary: "가게 정보 첫 추가"
  *        tags: [Store]
@@ -112,7 +112,7 @@ storeRouter.get("/getInfoByOwnerId", storeController.getInfoByOwnerId);
  *         404:
  *           description: 잘못된 데이터 혹은 빈 데이터
  */
-storeRouter.post("/add", storeController.add);
+storeRouter.post("/registration", storeController.registration);
 
 /**
  * @swagger

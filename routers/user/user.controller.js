@@ -23,9 +23,8 @@ module.exports = {
          * etc: DataTypes.STRING(5000),
          */
         var flag = true;
-        console.log(req.body);
 
-        if (req.isAuth) { // 로그인 필수
+        if (!req.isAuth) { // 로그인 필수
             return res.json({
                 message: '요청을 처리하는 중 오류가 발생하였습니다.'
             });
@@ -89,7 +88,7 @@ module.exports = {
         }
     },
     getResume: function (req, res) {
-        if (req.isAuth) { // 로그인 필수
+        if (!req.isAuth) { // 로그인 필수
             return res.json({
                 message: '요청을 처리하는 중 오류가 발생하였습니다.'
             });
