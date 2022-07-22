@@ -1,6 +1,5 @@
 // 실제 가게 라우터 처리 로직
 const Store = require("../../models").Store;
-const uuid = require("uuid");
 const jwt = require("jsonwebtoken");
 
 module.exports = {
@@ -11,7 +10,7 @@ module.exports = {
       },
     })
       .then(function (queryRes) {
-        if (queryRes != null) res.json(queryRes);
+        if (queryRes != null) res.json(queryRes.dataValues);
         else {
           res.status(404);
           res.json({ message: "존재하지 않는 가게 id 입니다." });
@@ -30,7 +29,7 @@ module.exports = {
       where: { owner_uuid: user_uuid },
     }).then((result) => {
       if (result != null) {
-        res.json(result);
+        res.json(result.dataValues);
       } else {
         res.status(404).json({ message: "존재하지 않는 가게입니다." });
       }
@@ -68,11 +67,10 @@ module.exports = {
           var deltaLat = (x1 * Math.PI) / 180;
           var deltaLon = (x2 * Math.PI) / 180;
           var a =
-            Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+            Math.pow(Math.sin(deltaLat / 2), 2) +
             Math.cos((userLat * Math.PI) / 180) *
-              Math.cos((data.dataValues.lat * Math.PI) / 180) *
-              Math.sin(deltaLon / 2) *
-              Math.sin(deltaLon / 2);
+            Math.cos((data.dataValues.lat * Math.PI) / 180) *
+            Math.pow(Math.sin(deltaLon / 2));
           var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
           var d = 6371 * c;
 
@@ -84,4 +82,30 @@ module.exports = {
     }
     await res.json(nearByStoresContainer);
   },
+  addHeart: async function (req, res) {
+    if (req.isAuth) { // 로그인 필수
+      return res.json({
+        message: '요청을 처리하는 중 오류가 발생하였습니다.'
+      });
+    }
+
+    if (req.body.target_store_id != "" || req.body.target_store_id != undefined) {
+      Store.increment({
+        heart: 1
+      },
+        {
+          where: {
+            id: req.body.target_store_id
+          }
+        })
+        .then(function (result) {
+          res.status(200);
+          res.json({ message: "요청이 잘 수행되었습니다." });
+        })
+        .catch(function (err) {
+          res.status(500);
+          res.json({ message: "알 수 없는 오류가 발생했습니다." });
+        });
+    }
+  }
 };

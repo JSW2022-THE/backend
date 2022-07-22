@@ -1,7 +1,7 @@
 // 사용자 라우터
 
-const userRouter = require("express").Router()
-const userController = require("./user.controller")
+const userRouter = require("express").Router();
+const userController = require("./user.controller");
 
 /**
  * @swagger
@@ -27,6 +27,10 @@ const userController = require("./user.controller")
  *                            {kakao_id: "BIGINT", uuid: "VARCHAR", name: "박태진", agree_terms_of_service: "TINYINT", age: "INT", createdAt: 2022-07-17 06:44:40, updatedAt: 2022-07-17 06:44:40},
  *                          ]
  */
-userRouter.get("/users", userController.getAllUsers)
+userRouter.get("/users", userController.getAllUsers);
+
+userRouter.post("/resume", userController.resume);
+
+userRouter.get("/getResume", userController.getResume);
 
 module.exports = userRouter

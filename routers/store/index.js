@@ -176,4 +176,6 @@ storeRouter.post("/add", storeController.add);
  */
 storeRouter.get("/getNearBy", storeController.getNearBy);
 
+storeRouter.post("/addHeart", storeController.addHeart);
+
 module.exports = storeRouter;
