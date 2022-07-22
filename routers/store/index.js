@@ -1,7 +1,7 @@
 // 가게 라우터
 
-const storeRouter = require("express").Router()
-const storeController = require("./store.controller")
+const storeRouter = require("express").Router();
+const storeController = require("./store.controller");
 
 /**
  * @swagger
@@ -27,7 +27,7 @@ const storeController = require("./store.controller")
  *                            { name: "태진마라마라", rate: 7777777, text_location: "충청북도 청청청 구구구 로로로", lat: 36.62730948983622, lon: 127.51195958283104, description: "마라만 만들어 나가는 가게"}
  *                          ]
  */
- storeRouter.get("/stores", storeController.getAllStores)
+storeRouter.get("/stores", storeController.getAllStores);
 
 /**
  * @swagger
@@ -63,11 +63,13 @@ const storeController = require("./store.controller")
  *                  heart:
  *                    type: integer
  *                  address:
- *                    type: string 
+ *                    type: string
  *         404:
  *           description: 잘못된 가게 id
  */
-storeRouter.get("/getInfo", storeController.getInfo)
+storeRouter.get("/getInfo", storeController.getInfo);
+//--------------------------------------------------
+storeRouter.get("/getInfoByOwnerId", storeController.getInfoByOwnerId);
 
 /**
  * @swagger
@@ -103,14 +105,14 @@ storeRouter.get("/getInfo", storeController.getInfo)
  *                  heart:
  *                    type: integer
  *                  address:
- *                    type: string 
+ *                    type: string
  *        responses:
  *         200:
  *          description: 성공시 response code 200
  *         404:
  *           description: 잘못된 데이터 혹은 빈 데이터
  */
-storeRouter.post("/add", storeController.add)
+storeRouter.post("/add", storeController.add);
 
 /**
  * @swagger
@@ -134,6 +136,12 @@ storeRouter.post("/add", storeController.add)
  *            schema:
  *              type: number
  *              description: 사용자 경도
+ *          - in: query
+ *            name: dis
+ *            required: false
+ *            schema:
+ *              type: number
+ *              description: 가져올 최대 거리(km)
  *        responses:
  *         200:
  *          description: 조회된 데이터
@@ -147,25 +155,25 @@ storeRouter.post("/add", storeController.add)
  *                      example:
  *                        [
  *                          {
- *                            name: "태진마라탕", 
- *                            rate: 100, 
- *                            text_location: "충청북도 청주시 상당구 로로로", 
- *                            lat: 36.63010046569394, 
- *                            lon: 127.51671854407965, 
+ *                            name: "태진마라탕",
+ *                            rate: 100,
+ *                            text_location: "충청북도 청주시 상당구 로로로",
+ *                            lat: 36.63010046569394,
+ *                            lon: 127.51671854407965,
  *                            description: "미래를 만들어 나가는 가게"
- *                          }, 
+ *                          },
  *                          {
- *                            name: "태진마라샹궈", 
- *                            rate: 777, 
- *                            text_location: "충청북도 청주시 상당구 로로로", 
- *                            lat: 36.62730948983622, 
- *                            lon: 127.51195958283104, 
+ *                            name: "태진마라샹궈",
+ *                            rate: 777,
+ *                            text_location: "충청북도 청주시 상당구 로로로",
+ *                            lat: 36.62730948983622,
+ *                            lon: 127.51195958283104,
  *                            description: "마라를 만들어 나가는 가게"
  *                          }
  *                      ]
  *         500:
  *           description: 알 수 없는 오류
  */
- storeRouter.get("/getNearBy", storeController.getNearBy)
+storeRouter.get("/getNearBy", storeController.getNearBy);
 
-module.exports = storeRouter
+module.exports = storeRouter;
