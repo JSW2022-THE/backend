@@ -90,22 +90,31 @@ module.exports = {
     }
 
     if (req.body.target_store_id != "" || req.body.target_store_id != undefined) {
-      Store.increment({
-        heart: 1
-      },
-        {
-          where: {
-            id: req.body.target_store_id
-          }
-        })
-        .then(function (result) {
-          res.status(200);
-          res.json({ message: "요청이 잘 수행되었습니다." });
-        })
-        .catch(function (err) {
-          res.status(500);
-          res.json({ message: "알 수 없는 오류가 발생했습니다." });
-        });
+      const dbReqRes = await Store.findOne({
+        id: req.body.target_store_id
+      });
+
+      if (dbReqRes == undefined) {
+        req.status(404);
+        req.json({ message: "요청한 가게를 찾을 수 없습니다." });
+      } else {
+        Store.increment({
+          heart: 1
+        },
+          {
+            where: {
+              id: req.body.target_store_id
+            }
+          })
+          .then(function (result) {
+            res.status(200);
+            res.json({ message: "요청이 잘 수행되었습니다." });
+          })
+          .catch(function (err) {
+            res.status(500);
+            res.json({ message: "알 수 없는 오류가 발생했습니다." });
+          });
+      }
     }
   }
 };
