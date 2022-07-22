@@ -136,6 +136,12 @@ storeRouter.post("/add", storeController.add);
  *            schema:
  *              type: number
  *              description: 사용자 경도
+ *          - in: query
+ *            name: dis
+ *            required: false
+ *            schema:
+ *              type: number
+ *              description: 가져올 최대 거리(km)
  *        responses:
  *         200:
  *          description: 조회된 데이터
