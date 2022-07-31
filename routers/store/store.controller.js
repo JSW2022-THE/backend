@@ -22,16 +22,20 @@ module.exports = {
       });
   },
   getInfoByOwnerId: function (req, res) {
-    Store.findAll({
-      where: { owner_uuid: jwt.decode(req.cookies.access_token) },
-    }).then(function (result) {
-      if (result != null) {
-        res.json(result.dataValues);
-      } else {
-        res.status(404);
-        res.json({ message: "존재하지 않는 가게입니다." });
-      }
-    });
+    if (req.cookies.access_token) {
+      Store.findAll({
+        where: { owner_uuid: jwt.decode(req.cookies.access_token) },
+      }).then(function (result) {
+        if (result != null) {
+          res.json(result.dataValues);
+        } else {
+          res.status(404);
+          res.json({ message: "존재하지 않는 가게입니다." });
+        }
+      });
+    } else {
+      res.json({ message: "접근 권한 없음." });
+    }
   },
   getAllStores: async function (req, res) {
     Store.findAll({})
@@ -43,18 +47,27 @@ module.exports = {
       });
   },
   registration: async function (req, res) {
-
-    if (!req.isAuth) { // 로그인 필수
+    if (!req.isAuth) {
+      // 로그인 필수
       return res.json({
-        message: '요청을 처리하는 중 오류가 발생하였습니다.'
+        message: "요청을 처리하는 중 오류가 발생하였습니다.",
       });
     }
 
-
     var flag = true;
 
-    if (req.body.name == "" || req.body.lat == "" || req.body.lon == "" || req.body.description == "" || req.body.address == "" ||
-      req.body.name == undefined || req.body.lat == undefined || req.body.lon == undefined || req.body.description == undefined || req.body.address == undefined) {
+    if (
+      req.body.name == "" ||
+      req.body.lat == "" ||
+      req.body.lon == "" ||
+      req.body.description == "" ||
+      req.body.address == "" ||
+      req.body.name == undefined ||
+      req.body.lat == undefined ||
+      req.body.lon == undefined ||
+      req.body.description == undefined ||
+      req.body.address == undefined
+    ) {
       res.status(400);
       res.json({ message: "입력값중 일부가 비어있거나 잘못되어있습니다." });
       flag = false;
@@ -63,11 +76,12 @@ module.exports = {
     if (flag) {
       const dbReqRes = await Store.findOne({
         where: {
-          owner_uuid: req.body.userUuid
-        }
+          owner_uuid: req.body.userUuid,
+        },
       });
 
-      if (dbReqRes == undefined) { // 처음 가게 정보 작성시
+      if (dbReqRes == undefined) {
+        // 처음 가게 정보 작성시
         await Store.create({
           name: req.body.name,
           lat: req.body.lat,
@@ -75,19 +89,20 @@ module.exports = {
           description: req.body.description,
           heart: 0,
           address: req.body.address,
-          owner_uuid: req.body.userUuid
+          owner_uuid: req.body.userUuid,
         });
         res.status(200);
         res.json({ message: "요청이 잘 수행되었습니다." });
-      } else { // 이미 존재하는 가게였다면
+      } else {
+        // 이미 존재하는 가게였다면
         var dbReqData = {
           name: dbReqRes.dataValues.name,
           lat: dbReqRes.dataValues.lat,
           lon: dbReqRes.dataValues.lon,
           description: dbReqRes.dataValues.description,
           address: dbReqRes.dataValues.address,
-          owner_uuid: dbReqRes.dataValues.userUuid
-        }
+          owner_uuid: dbReqRes.dataValues.userUuid,
+        };
 
         if (dbReqRes.dataValues.name != req.body.name)
           dbReqData.name = req.body.name;
@@ -104,12 +119,11 @@ module.exports = {
         if (dbReqRes.dataValues.address != req.body.address)
           dbReqData.address = req.body.address;
 
-        await Store.update(dbReqData,
-          {
-            where: {
-              owner_uuid: req.body.userUuid
-            }
-          });
+        await Store.update(dbReqData, {
+          where: {
+            owner_uuid: req.body.userUuid,
+          },
+        });
         res.status(200);
         res.json({ message: "요청이 잘 수행되었습니다." });
       }
@@ -137,8 +151,8 @@ module.exports = {
           var a =
             Math.pow(Math.sin(deltaLat / 2), 2) +
             Math.cos((userLat * Math.PI) / 180) *
-            Math.cos((data.dataValues.lat * Math.PI) / 180) *
-            Math.pow(Math.sin(deltaLon / 2));
+              Math.cos((data.dataValues.lat * Math.PI) / 180) *
+              Math.pow(Math.sin(deltaLon / 2));
           var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
           var d = 6371 * c;
 
@@ -151,29 +165,35 @@ module.exports = {
     await res.json(nearByStoresContainer);
   },
   addHeart: async function (req, res) {
-    if (!req.isAuth) { // 로그인 필수
+    if (!req.isAuth) {
+      // 로그인 필수
       return res.json({
-        message: '요청을 처리하는 중 오류가 발생하였습니다.'
+        message: "요청을 처리하는 중 오류가 발생하였습니다.",
       });
     }
 
-    if (req.body.target_store_id != "" || req.body.target_store_id != undefined) {
+    if (
+      req.body.target_store_id != "" ||
+      req.body.target_store_id != undefined
+    ) {
       const dbReqRes = await Store.findOne({
-        id: req.body.target_store_id
+        id: req.body.target_store_id,
       });
 
       if (dbReqRes == undefined) {
         req.status(404);
         req.json({ message: "요청한 가게를 찾을 수 없습니다." });
       } else {
-        Store.increment({
-          heart: 1
-        },
+        Store.increment(
+          {
+            heart: 1,
+          },
           {
             where: {
-              id: req.body.target_store_id
-            }
-          })
+              id: req.body.target_store_id,
+            },
+          }
+        )
           .then(function (result) {
             res.status(200);
             res.json({ message: "요청이 잘 수행되었습니다." });
@@ -184,5 +204,5 @@ module.exports = {
           });
       }
     }
-  }
+  },
 };
