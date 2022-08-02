@@ -1,7 +1,8 @@
-const router = require("express").Router()
-const user = require("./user")
-const store = require("./store")
-const auth = require('./auth')
+const router = require("express").Router();
+const user = require("./user");
+const store = require("./store");
+const auth = require("./auth");
+const chat = require("./chat");
 
 /**
  * @swagger
@@ -9,7 +10,7 @@ const auth = require('./auth')
  *   name: User
  *   description: 유저 추가 수정 삭제 조회
  */
-router.use("/user", user)
+router.use("/user", user);
 
 /**
  * @swagger
@@ -17,7 +18,7 @@ router.use("/user", user)
  *  name: Store
  *  description: 가게 추가 수정 삭제 조회
  */
-router.use("/store", store)
+router.use("/store", store);
 
 /**
  * @swagger
@@ -25,7 +26,8 @@ router.use("/store", store)
  *  name: Auth
  *  description: 사용자 인증
  */
-router.use("/auth", auth)
+router.use("/auth", auth);
 
+router.use("/chat", chat);
 
-module.exports = router
+module.exports = router;

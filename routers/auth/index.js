@@ -1,6 +1,5 @@
-
-const authRouter = require("express").Router()
-const authController = require("./auth.controller")
+const authRouter = require("express").Router();
+const authController = require("./auth.controller");
 
 /**
  * @swagger
@@ -37,8 +36,8 @@ const authController = require("./auth.controller")
  *         404:
  *           description: 잘못된 token
  */
-authRouter.post("/login", authController.login)
-authRouter.get("/check/tos", authController.getTosCheck)
-authRouter.post("/new/user", authController.setNewUserData)
+authRouter.post("/login", authController.login);
+authRouter.get("/check/tos", authController.getTosCheck);
+authRouter.post("/new/user", authController.setNewUserData);
 
-module.exports = authRouter
+module.exports = authRouter;

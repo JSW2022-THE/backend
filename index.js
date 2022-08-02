@@ -8,8 +8,8 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const http = require("http");
-const server = http.createServer(app);
-require("./modules/socket")(server);
+const server = http.createServer(app); //socketIO 의 롱폴링을 위한 http
+require("./modules/socket")(server); //socketIO Init
 db.sequelize.sync(); // sequelize init
 
 //Express 4.16.0버전 부터 body-parser의 일부 기능이 익스프레스에 내장 body-parser 연결
