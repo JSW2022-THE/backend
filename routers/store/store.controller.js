@@ -151,8 +151,8 @@ module.exports = {
           var a =
             Math.pow(Math.sin(deltaLat / 2), 2) +
             Math.cos((userLat * Math.PI) / 180) *
-              Math.cos((data.dataValues.lat * Math.PI) / 180) *
-              Math.pow(Math.sin(deltaLon / 2));
+            Math.cos((data.dataValues.lat * Math.PI) / 180) *
+            Math.pow(Math.sin(deltaLon / 2));
           var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
           var d = 6371 * c;
 

@@ -3,6 +3,7 @@ const user = require("./user");
 const store = require("./store");
 const auth = require("./auth");
 const chat = require("./chat");
+const contract = require("./contract");
 
 /**
  * @swagger
@@ -29,5 +30,7 @@ router.use("/store", store);
 router.use("/auth", auth);
 
 router.use("/chat", chat);
+
+router.use("/contract", contract);
 
 module.exports = router;

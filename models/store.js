@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     heart: DataTypes.BIGINT,
     address: DataTypes.STRING,
     owner_uuid: DataTypes.STRING,
+    phone_number: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Store',
