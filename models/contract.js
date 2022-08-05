@@ -14,7 +14,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Contract.init({
-    contract_uuid: DataTypes.TEXT,
+    contract_uuid: {
+      type: DataTypes.STRING,
+      primaryKey: true
+    },
     company_name: DataTypes.TEXT,
     ceo_name: DataTypes.TEXT,
     company_number: DataTypes.TEXT,
