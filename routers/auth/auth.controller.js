@@ -38,7 +38,11 @@ module.exports = {
             })
             return res.json({
                 status: 'success',
-                message: '요청을 정상적으로 처리하였습니다.'
+                message: '요청을 정상적으로 처리하였습니다.',
+                user_info: {
+                    name: name,
+                    uuid: req.userUuid
+                }
             })
         } else {
             return res.json({
@@ -58,10 +62,11 @@ module.exports = {
             where: {
                 uuid: req.userUuid
             },
-            attributes: ['name', 'agree_terms_of_service']
+            attributes: ['name', 'uuid', 'agree_terms_of_service']
         })
         return res.json({
             name: isUserAgreeTermsAndUserInfo.name,
+            uuid: isUserAgreeTermsAndUserInfo.uuid,
             agree_tos: isUserAgreeTermsAndUserInfo.agree_terms_of_service
         })
 
@@ -112,6 +117,7 @@ module.exports = {
                     kakao_refresh: kakao_refresh_token,
                     user_uuid: '',
                     token_uuid: '',
+                    name: '',
                 }
                 if (findUserInDB == undefined) { // 유저가 없을 시 생성
                     let user_uuid = uuid.v4()
@@ -121,9 +127,11 @@ module.exports = {
                         name: userData.data.kakao_account.profile.nickname
                     })
                     user_token_data.user_uuid = user_uuid
+                    user_token_data.name = userData.data.kakao_account.profile.nickname
                     isNewUser = true
                 } else {
                     user_token_data.user_uuid = findUserInDB.uuid
+                    user_token_data.name = findUserInDB.name
                 }
 
                 // jwt 토큰 생성
@@ -158,7 +166,11 @@ module.exports = {
 
                 let res_data = {
                     access_token: access_token,
-                    refresh_token: refresh_token
+                    refresh_token: refresh_token,
+                    user_info: {
+                        uuid: user_token_data.user_uuid,
+                        name: user_token_data.name
+                    }
                 }
                 res.cookie('access_token', access_token, {
                     httpOnly: true,
