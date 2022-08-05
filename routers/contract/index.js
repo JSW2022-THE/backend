@@ -5,6 +5,6 @@ contractRouter.get("/getUsersData", contractController.getUsersData);
 
 contractRouter.get("/verify", contractController.verify);
 
-contractController.post("/save", contractController.save);
+contractRouter.post("/save", contractController.save);
 
 module.exports = contractRouter;
