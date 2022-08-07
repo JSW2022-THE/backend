@@ -216,7 +216,7 @@ module.exports = {
 
   getLoggedInUserUUID: (req, res) => {
     if (!req.cookies.access_token)
-      res.status(403).send({
+      return res.status(403).send({
         status: 403,
         message: "로그인 정보 오류, 다시 로그인 하세요.",
       });

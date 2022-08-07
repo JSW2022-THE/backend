@@ -1,12 +1,15 @@
 const { Server } = require("socket.io");
-const { Chats, ChatRooms } = require("../models");
+const { User, Chats, ChatRooms, sequelize } = require("../models");
 const { Op } = require("sequelize");
 const uuid = require("uuid");
 
 module.exports = (server) => {
   const io = new Server(server, { cors: { origin: "*" } });
-  let user_uuid;
+
   io.on("connection", (socket) => {
+    let user_uuid;
+    let isChecker = false;
+
     console.log("a user connected : " + socket.id);
 
     //소켓에 연결 후 방에 대한 권한 인증과 방에 JOIN 처리
@@ -72,14 +75,30 @@ module.exports = (server) => {
       });
     });
 
+    socket.on("onlineChecker", async (_uuid) => {
+      user_uuid = _uuid;
+      isChecker = true;
+      User.update(
+        { is_online: true, last_online: null },
+        { where: { uuid: _uuid } }
+      );
+    });
+
     // 소켓이 연결이 끊어질때
     socket.on("disconnect", (_data) => {
+      if (isChecker) {
+        User.update(
+          { is_online: false, last_online: sequelize.fn("NOW") },
+          { where: { uuid: user_uuid } }
+        );
+      }
       console.log(
         "해당 소켓이 연결이 끊어졌습니다 : " +
           "socket_id: " +
           socket.id +
           " user_uuid: " +
-          user_uuid
+          user_uuid +
+          isChecker
       );
     });
   });
