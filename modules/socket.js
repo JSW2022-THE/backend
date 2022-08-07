@@ -12,6 +12,8 @@ module.exports = (server) => {
     //소켓에 연결 후 방에 대한 권한 인증과 방에 JOIN 처리
     socket.on("joinRoom", async (_data) => {
       console.log("roomid : " + _data.room_id);
+
+      //joinRoom 이벤트를 보낸 사람의 UUID가 해당 채팅룸에 접근 권한이 있나 쿼리
       await ChatRooms.findOne({
         attributes: ["people"],
         where: {
@@ -21,6 +23,7 @@ module.exports = (server) => {
       })
         .then((_roomPeopleData) => {
           if (_roomPeopleData) {
+            //권한이 있다면
             socket.join(_data.room_id);
             Chats.findAll({
               where: { room_id: _data.room_id },
@@ -29,6 +32,7 @@ module.exports = (server) => {
               socket.emit("getChatData", _chatData);
             });
           } else {
+            //권한이 없다면 바로 소켓 끊어버리기~
             socket.emit("errorHandler", {
               status: 403,
               message: "해당 채팅룸에 접근 권한이 없습니다.",
@@ -43,11 +47,6 @@ module.exports = (server) => {
           });
           console.error(err);
         });
-
-      // const parsedRoomPeopleData = JSON.parse(roomPeopleData.dataValues.people);
-      // console.log(
-      //   parsedRoomPeopleData.includes("5dd3ac68-ee4d-4d23-9ff4-f24c074395e6")
-      // );
     });
 
     // 클라이언트로 부터 메세지 전송을 받았을때 DB에 저장 후 다른 클라이언트에게 전달
