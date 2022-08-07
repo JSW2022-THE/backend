@@ -5,20 +5,26 @@ const uuid = require("uuid");
 
 module.exports = (server) => {
   const io = new Server(server, { cors: { origin: "*" } });
-
+  let user_uuid;
   io.on("connection", (socket) => {
     console.log("a user connected : " + socket.id);
 
     //소켓에 연결 후 방에 대한 권한 인증과 방에 JOIN 처리
-    socket.on("joinRoom", async (_data) => {
-      console.log("roomid : " + _data.room_id);
-
+    socket.on("joinRoom", (_data) => {
+      console.log(
+        "joinRoom 요청: " +
+          "room_id: " +
+          _data.room_id +
+          " user_uuid: " +
+          _data.user_uuid
+      );
+      user_uuid = _data.user_uuid;
       //joinRoom 이벤트를 보낸 사람의 UUID가 해당 채팅룸에 접근 권한이 있나 쿼리
-      await ChatRooms.findOne({
+      ChatRooms.findOne({
         attributes: ["people"],
         where: {
           room_id: _data.room_id,
-          people: { [Op.substring]: _data.logged_in_user },
+          people: { [Op.substring]: _data.user_uuid },
         },
       })
         .then((_roomPeopleData) => {
@@ -68,7 +74,13 @@ module.exports = (server) => {
 
     // 소켓이 연결이 끊어질때
     socket.on("disconnect", (_data) => {
-      console.log("연결해재 : " + socket.id);
+      console.log(
+        "해당 소켓이 연결이 끊어졌습니다 : " +
+          "socket_id: " +
+          socket.id +
+          " user_uuid: " +
+          user_uuid
+      );
     });
   });
 };
