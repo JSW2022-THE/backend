@@ -224,7 +224,7 @@ module.exports = {
 
     jwt.verify(access_token, process.env.JWT_ACCESS_SECRET, (err, decoded) => {
       if (err)
-        res.status(403).json({
+        return res.status(403).json({
           status: 403,
           message: "로그인 정보 오류, 다시 로그인 하세요.",
         });
