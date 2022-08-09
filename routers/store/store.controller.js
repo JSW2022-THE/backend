@@ -22,20 +22,16 @@ module.exports = {
       });
   },
   getInfoByOwnerId: function (req, res) {
-    if (req.cookies.access_token) {
-      Store.findAll({
-        where: { owner_uuid: jwt.decode(req.cookies.access_token) },
-      }).then(function (result) {
-        if (result != null) {
-          res.json(result.dataValues);
-        } else {
-          res.status(404);
-          res.json({ message: "존재하지 않는 가게입니다." });
-        }
-      });
-    } else {
-      res.json({ message: "접근 권한 없음." });
-    }
+    Store.findAll({
+      where: { owner_uuid: req.userUuid },
+    }).then(function (result) {
+      if (result != null) {
+        res.json(result.dataValues);
+      } else {
+        res.status(404);
+        res.json({ message: "존재하지 않는 가게입니다." });
+      }
+    });
   },
   getAllStores: async function (req, res) {
     Store.findAll({})
@@ -151,8 +147,8 @@ module.exports = {
           var a =
             Math.pow(Math.sin(deltaLat / 2), 2) +
             Math.cos((userLat * Math.PI) / 180) *
-            Math.cos((data.dataValues.lat * Math.PI) / 180) *
-            Math.pow(Math.sin(deltaLon / 2));
+              Math.cos((data.dataValues.lat * Math.PI) / 180) *
+              Math.pow(Math.sin(deltaLon / 2));
           var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
           var d = 6371 * c;
 

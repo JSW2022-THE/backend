@@ -3,13 +3,15 @@ const { Op } = require("sequelize");
 
 module.exports = {
   getChatRooms: (req, res) => {
-    res.json({ test: "chat test" });
+    const user_uuid = req.userUuid;
+
+    res.send(user_uuid);
   },
   createChatRoom: (req, res) => {
     console.log("dd");
   },
-  getChatRoomOnlineStatusByUUID: async (req, res) => {
-    const user_uuid = req.body.user_uuid;
+  getChatRoomOnlineStatus: async (req, res) => {
+    const user_uuid = req.userUuid;
     const room_id = req.body.room_id;
     let chatRoomPeopleUuid = [];
 
