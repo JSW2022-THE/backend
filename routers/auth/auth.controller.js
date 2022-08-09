@@ -215,21 +215,12 @@ module.exports = {
   },
 
   getLoggedInUserUUID: (req, res) => {
-    if (!req.cookies.access_token)
+    if (!req.isAuth)
       return res.status(403).send({
         status: 403,
         message: "로그인 정보 오류, 다시 로그인 하세요.",
       });
-    const access_token = req.cookies.access_token;
 
-    jwt.verify(access_token, process.env.JWT_ACCESS_SECRET, (err, decoded) => {
-      if (err)
-        return res.status(403).json({
-          status: 403,
-          message: "로그인 정보 오류, 다시 로그인 하세요.",
-        });
-
-      res.send(decoded.user_uuid);
-    });
+    res.send(req.userUuid);
   },
 };
