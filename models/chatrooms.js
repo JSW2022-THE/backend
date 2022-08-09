@@ -17,6 +17,8 @@ module.exports = (sequelize, DataTypes) => {
       people: { type: DataTypes.STRING, allowNull: false },
       status: { type: DataTypes.STRING, allowNull: false },
       creator: { type: DataTypes.STRING, allowNull: false },
+      recent_msg: { type: DataTypes.TEXT("long"), allowNull: true },
+      recent_msg_at: { type: DataTypes.DATE, allowNull: true },
     },
     {
       sequelize,

@@ -67,6 +67,14 @@ module.exports = (server) => {
         msg: _data.msg,
         sender_id: _data.sender_id,
       });
+      //채팅룸 테이블의 가장 최근 메세지를 프론트에서 보여주기 위한 recent_msg 처리
+      await ChatRooms.update(
+        {
+          recent_msg: _data.msg,
+          recent_msg_at: sequelize.fn("NOW"),
+        },
+        { where: { room_id: _data.room_id } }
+      );
       io.to(_data.room_id).emit("msgSend", {
         chat_id: chatId,
         room_id: _data.room_id,

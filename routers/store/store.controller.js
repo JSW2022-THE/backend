@@ -1,6 +1,5 @@
 // 실제 가게 라우터 처리 로직
 const Store = require("../../models").Store;
-const jwt = require("jsonwebtoken");
 
 module.exports = {
   getInfo: function (req, res) {
