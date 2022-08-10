@@ -1,11 +1,37 @@
-const { User, ChatRooms } = require("../../models");
+const { User, ChatRooms, Chats } = require("../../models");
 const { Op } = require("sequelize");
 
 module.exports = {
-  getChatRooms: (req, res) => {
+  getChatRooms: async (req, res) => {
     const user_uuid = req.userUuid;
+    let resultChatData = [];
 
-    res.send(user_uuid);
+    //user_uuid가 포함되어있고, status가 open인 데이터만 쿼리
+    const chatRoomData = await ChatRooms.findAll({
+      attributes: ["room_id", "people", "recent_msg", "recent_msg_at"],
+      where: { people: { [Op.substring]: user_uuid }, status: "open" },
+    });
+
+    chatRoomData.map((_data) => {
+      let peopleNames = [];
+      const parsedChatRoomPeople = JSON.parse(_data.people);
+      const filteredChatRoomPeople = parsedChatRoomPeople.filter(
+        (i) => i.uuid !== user_uuid
+      );
+      filteredChatRoomPeople.map((i) => {
+        peopleNames.push(i.name);
+      });
+
+      resultChatData.push({
+        room_id: _data.room_id,
+        people_names: peopleNames,
+        recent_msg: _data.recent_msg,
+        recent_msg_at: _data.recent_msg_at,
+      });
+    });
+    console.log;
+
+    res.json({ status: 200, data: resultChatData });
   },
   createChatRoom: (req, res) => {
     console.log("dd");
