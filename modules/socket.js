@@ -1,10 +1,12 @@
 const { Server } = require("socket.io");
+const encrypt = require('socket.io-encrypt')
 const { User, Chats, ChatRooms, sequelize } = require("../models");
 const { Op } = require("sequelize");
 const uuid = require("uuid");
 
 module.exports = (server) => {
   const io = new Server(server, { cors: { origin: "*" } });
+  io.use(encrypt(process.env.SOCKET_SECRET))
 
   io.on("connection", (socket) => {
     let user_uuid;
