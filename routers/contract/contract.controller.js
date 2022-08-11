@@ -7,6 +7,9 @@ const crypto = require("../../modules/crypto")
 const _crypto = require("crypto")
 const axios = require("axios")
 const CryptoJS = require("crypto-js");
+//솔라피 문자 발송
+const { SolapiMessageService } = require("solapi");
+const messageService = new SolapiMessageService(process.env.SOLAPI_API_KEY, process.env.SOLAPI_API_SECRET);
 
 module.exports = {
     accessContract: async function (req, res) {
@@ -233,7 +236,31 @@ module.exports = {
             console.log("그리고 계약서 uuid: "+contract_uuid)
             res.json({status:'success'}) // 여기서 요청 보내주고 아래에서 문자는 돌아감.
 
-            // [SMS 전송] - 네이버 클라우드 플랫폼 이용 // 비용문제로 진짜 테스트하거나 시연할 때 아니면 주석처리.
+            let worker_uuid = contract_body_data.worker_uuid;
+            let owner_uuid = contract_body_data.ceo_uuid
+            let worker_info = await User.findOne({
+                where: {
+                    uuid: worker_uuid
+                }
+            })
+            let owner_info = await User.findOne({
+                where: {
+                    uuid: owner_uuid
+                }
+            })
+            // [SMS전송-옵션1] SOLAPI
+            messageService.send([
+                {
+                from: process.env.SOLAPI_API_FROM_NUMBER,
+                to: worker_info.phone_number,
+                text: `안녕하세요, 전자근로계약서가 ${worker_info.name}님 에게 도착했어요. 아래 주소에서 내용을 확인 후, 동의한다면 동의 버튼을 눌러주세요.\r\n\r\n- 주소: https://jsw2022.pages.dev/contract/confirm/${contract_uuid}\r\n- 접속 인증번호: ${contract_secret}\r\n- 동의 시 계약은 즉시 체결되며, 계약서를 확인할 수 있는 주소를 문자로 보내드립니다.`,
+                //subject: "문자 제목" // 제목쓰면 내용이 짧아도 자동으로 LMS로 넘어감. 쓰지마셈.
+                },
+                // 배열형태로 최대 10,000건까지 동시 전송가능
+              ]).then(res => console.log(res.groupInfo.log[1].message + "\n" +res.groupInfo.log[2].message));
+
+
+            // [SMS 전송-옵션2] - 네이버 클라우드 플랫폼 이용 // 비용문제로 진짜 테스트하거나 시연할 때 아니면 주석처리.
             // let worker_uuid = contract_body_data.worker_uuid;
             // let owner_uuid = contract_body_data.ceo_uuid
             // let worker_info = await User.findOne({
