@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Store.init({
+    store_uuid: {
+      type: DataTypes.STRING(36),
+      primaryKey: true,
+    },
     name: DataTypes.STRING,
     lat: DataTypes.DOUBLE,
     lon: DataTypes.DOUBLE,
