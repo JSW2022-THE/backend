@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       kakao_id: { type: DataTypes.BIGINT, primaryKey: true },
       uuid: DataTypes.STRING,
+        phone_number: DataTypes.STRING,
       name: DataTypes.STRING,
       agree_terms_of_service: {
         type: DataTypes.BOOLEAN,

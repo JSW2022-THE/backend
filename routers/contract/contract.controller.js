@@ -5,6 +5,8 @@ const jwt = require("jsonwebtoken");
 const uuid = require("uuid");
 const crypto = require("../../modules/crypto")
 const _crypto = require("crypto")
+const axios = require("axios")
+const CryptoJS = require("crypto-js");
 
 module.exports = {
     accessContract: async function (req, res) {
@@ -227,11 +229,62 @@ module.exports = {
             // 계약서 redis 정보 삭제
             console.log(`contract_access_token_${req.body.contract_access_token}`)
             await req.redis_client.del(`contract_access_token_${req.body.contract_access_token}`)
-            res.json({result:true})
+            console.log("방근 만들어진 계약서 접속 인증번호: "+contract_secret)
+            console.log("그리고 계약서 uuid: "+contract_uuid)
+            res.json({status:'success'}) // 여기서 요청 보내주고 아래에서 문자는 돌아감.
 
-            // [SMS 전송] - 네이버 클라우드 플랫폼 이용
-            let worker_uuid = req.body.worker_uuid;
-
+            // [SMS 전송] - 네이버 클라우드 플랫폼 이용 // 비용문제로 진짜 테스트하거나 시연할 때 아니면 주석처리.
+            // let worker_uuid = contract_body_data.worker_uuid;
+            // let owner_uuid = contract_body_data.ceo_uuid
+            // let worker_info = await User.findOne({
+            //     where: {
+            //         uuid: worker_uuid
+            //     }
+            // })
+            // let owner_info = await User.findOne({
+            //     where: {
+            //         uuid: owner_uuid
+            //     }
+            // })
+            // // very very thanks for https://velog.io/@ssumniee/node.js-서버에-SMS-인증-구현하기
+            // let date = Date.now().toString();
+            // let hmac = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA256, process.env.NAVER_CLOUD_PLATFORM_SECRET);
+            // hmac.update('POST');
+            // hmac.update(' ');
+            // hmac.update(`/sms/v2/services/${process.env.NAVER_CLOUD_PLATFORM_SMS_ID}/messages`);
+            // hmac.update('\n');
+            // hmac.update(date);
+            // hmac.update('\n');
+            // hmac.update(process.env.NAVER_CLOUD_PLATFORM_ACCESS);
+            // let hash = hmac.finalize();
+            // let signature = hash.toString(CryptoJS.enc.Base64);
+            //
+            // // 근로자 전송 후 고용주 전송 순서로.
+            // axios({
+            //     method: 'post',
+            //     url: `https://sens.apigw.ntruss.com/sms/v2/services/${process.env.NAVER_CLOUD_PLATFORM_SMS_ID}/messages`,
+            //     headers: {
+            //         "Content-Type": "application/json; charset=utf-8",
+            //         "x-ncp-apigw-timestamp": date,
+            //         "x-ncp-iam-access-key": process.env.NAVER_CLOUD_PLATFORM_ACCESS,
+            //         "x-ncp-apigw-signature-v2": signature
+            //     },
+            //     data: {
+            //         // type: "SMS"
+            //         // type: "LMS", // LMS 너무 비싸.. 실제 사용할 때나 중요할 때 빼고 사용하지 말것...
+            //         // contentType: "COMM",
+            //         countryCode: "82",
+            //         from: process.env.NAVER_CLOUD_PLATFORM_SMS_NUMBER,
+            //         subject: "[굿잡] 전자근로계약서가 도착하였습니다.",
+            //         content: `안녕하세요, 전자근로계약서가 ${worker_info.name}님 에게 도착했어요. 아래 주소에서 내용을 확인 후, 동의한다면 동의 버튼을 눌러주세요.\r\n\r\n- 주소: https://jsw2022.pages.dev/contract/confirm/${contract_uuid}\r\n- 접속 인증번호: ${contract_secret}\r\n- 동의 시 계약은 즉시 체결되며, 계약서를 확인할 수 있는 주소를 문자로 보내드립니다.`,
+            //         messages: [
+            //             {to: worker_info.phone_number}
+            //         ]
+            //     }
+            // })
+            //     .then(r=>{
+            //         console.log(r.data);
+            //     })
         }
     },
 };
