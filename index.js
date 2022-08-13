@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-let whitelist = ["http://localhost:3000"]; // 여기에 cors 허용할 사이트 주소 추가, 안하면 접근 불가함.
+let whitelist = ["http://localhost"]; // 여기에 cors 허용할 사이트 주소 추가, 안하면 접근 불가함.
 let corsOptions = {
   origin: function (origin, callback) {
     let is_whitelisted = whitelist.indexOf(origin) !== -1;
