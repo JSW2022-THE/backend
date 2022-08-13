@@ -70,6 +70,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 app.get("/", (req, res) => {
   res.send("What are you looking for here?");
+  console.log(req.headers["x-forwarded-for"] || req.connection.remoteAddress);
 });
 
 server.listen(port, () => {
