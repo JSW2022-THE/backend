@@ -13,5 +13,8 @@ RUN npm install --force
 # 필요한 모든 파일을 복사
 COPY . .
 
+# 2000 컨네이터 포트 Open
+EXPOSE 2000
+
 # 애플리케이션 실행
 CMD [ "node", "index.js" ]
