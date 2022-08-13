@@ -7,7 +7,7 @@ const db = require("./models");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
-const {createClient} = require('redis');
+const { createClient } = require("redis");
 const http = require("http");
 const server = http.createServer(app); //socketIO 의 롱폴링을 위한 http
 require("./modules/socket")(server); //socketIO Init
@@ -26,7 +26,8 @@ let corsOptions = {
   },
   credentials: true,
 };
-app.use(cors(corsOptions));
+//app.use(cors(corsOptions));
+app.use(cors()); // 모두허용
 
 const redis_client = createClient({
   url: process.env.REDIS_URL,
@@ -35,7 +36,7 @@ const redis_client = createClient({
   database: process.env.REDIS_DATABASE,
   socket_keepalive: true,
 });
-redis_client.connect()
+redis_client.connect();
 
 // req.isAuth 값이 true면 로그인한 상태
 const isAuth = async (req, res, next) => {
@@ -49,16 +50,16 @@ const isAuth = async (req, res, next) => {
           console.log(err);
           req.isAuth = false;
         } else {
-          req.userUuid = tokenInfo.user_uuid
+          req.userUuid = tokenInfo.user_uuid;
           req.isAuth = true;
         }
       }
     );
-    req.redis_client = redis_client
+    req.redis_client = redis_client;
     next();
   } else {
     req.isAuth = false;
-    req.redis_client = redis_client
+    req.redis_client = redis_client;
     next();
   }
 };
