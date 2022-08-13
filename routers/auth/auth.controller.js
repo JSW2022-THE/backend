@@ -2,7 +2,6 @@ const axios = require("axios");
 const {Token, User} = require("../../models");
 const uuid = require("uuid");
 const jwt = require("jsonwebtoken");
-const { NONE } = require("sequelize");
 
 module.exports = {
     setNewUserData: async function (req, res) {
