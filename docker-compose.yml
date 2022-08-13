@@ -1,0 +1,8 @@
+version: "3.9"
+services:
+  jsw-backend:
+    container_name: jsw-backend
+    image: jsw-backend
+    restart: always
+    ports:
+      - "2000:2000"
