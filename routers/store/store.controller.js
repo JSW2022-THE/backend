@@ -5,7 +5,7 @@ module.exports = {
   getInfo: function (req, res) {
     Store.findOne({
       where: {
-        id: req.query.id,
+        id: req.query.target_store_id,
       },
     })
       .then(function (queryRes) {
@@ -16,11 +16,19 @@ module.exports = {
         }
       })
       .catch(function (err) {
-        res.status(404);
+        res.status(500);
         res.json({ message: "알 수 없는 오류가 발생했습니다." });
       });
   },
   getInfoByOwnerId: function (req, res) {
+    if (!req.isAuth) {
+      // 로그인 필수
+      res.status(401);
+      return res.json({
+        message: "요청을 처리하는 중 오류가 발생하였습니다.",
+      });
+    }
+    
     Store.findAll({
       where: { owner_uuid: req.userUuid },
     }).then(function (result) {
@@ -38,12 +46,14 @@ module.exports = {
         if (queryRes != "") res.json(queryRes);
       })
       .catch(function (err) {
-        res.status(404);
+        res.status(500);
+        res.json({ message: "알 수 없는 오류가 발생했습니다." });
       });
   },
   registration: async function (req, res) {
     if (!req.isAuth) {
       // 로그인 필수
+      res.status(401);
       return res.json({
         message: "요청을 처리하는 중 오류가 발생하였습니다.",
       });
@@ -125,6 +135,13 @@ module.exports = {
     }
   },
   getNearBy: async function (req, res) {
+    if (!req.isAuth) {
+      // 로그인 필수
+      res.status(401);
+      return res.json({
+        message: "요청을 처리하는 중 오류가 발생하였습니다.",
+      });
+    }
     var flag = true;
     var favoriteDistance = 1.0; // 기본 1km
     var nearByStoresContainer = new Array();
@@ -146,8 +163,8 @@ module.exports = {
           var a =
             Math.pow(Math.sin(deltaLat / 2), 2) +
             Math.cos((userLat * Math.PI) / 180) *
-              Math.cos((data.dataValues.lat * Math.PI) / 180) *
-              Math.pow(Math.sin(deltaLon / 2));
+            Math.cos((data.dataValues.lat * Math.PI) / 180) *
+            Math.pow(Math.sin(deltaLon / 2));
           var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
           var d = 6371 * c;
 
@@ -162,6 +179,7 @@ module.exports = {
   addHeart: async function (req, res) {
     if (!req.isAuth) {
       // 로그인 필수
+      res.status(401);
       return res.json({
         message: "요청을 처리하는 중 오류가 발생하였습니다.",
       });

@@ -29,8 +29,20 @@ router.use("/store", store);
  */
 router.use("/auth", auth);
 
+/**
+ * @swagger
+ * tags:
+ *  name: Chat
+ *  description: 채팅
+ */
 router.use("/chat", chat);
 
+/**
+ * @swagger
+ * tags:
+ *  name: Contract
+ *  description: 계약서
+ */
 router.use("/contract", contract);
 
 module.exports = router;
