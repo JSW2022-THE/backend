@@ -1,4 +1,4 @@
-const {Store, User} = require("../../models");
+const { Store, User } = require("../../models");
 const contract = require("../../models").Contract;
 const jwt = require("jsonwebtoken");
 //const { json } = require("sequelize/types");
@@ -19,21 +19,21 @@ module.exports = {
                 message: "요청을 처리하는 중 오류가 발생하였습니다.",
             });
         }
-        let search_store = await Store.findOne({
+        let search_store = await Store.findOne({ // 고용주가 가게 여러개 내버리면?
             where: {
                 owner_uuid: req.userUuid,
             },
         });
         if (search_store == undefined) {
-            return res.json({message: "요청을 처리하는 중 오류가 발생하였습니다."});
+            return res.json({ message: "요청을 처리하는 중 오류가 발생하였습니다." });
         }
         let search_worker = await User.findOne({
             where: {
                 uuid: req.headers.worker_uuid
             }
         })
-        if(search_worker == undefined) {
-            return res.json({message: "요청을 처리하는 중 오류가 발생하였습니다."});
+        if (search_worker == undefined) {
+            return res.json({ message: "요청을 처리하는 중 오류가 발생하였습니다." });
         }
         let search_user = await User.findOne({ // 고용주
             where: {
@@ -55,7 +55,7 @@ module.exports = {
         await req.redis_client.set(`contract_access_token_${token}`, crypto.encrypt(JSON.stringify(token_data)))
         await req.redis_client.expire(`contract_access_token_${token}`, 60 * 60 * 24) // 24시간
 
-        res.json({token: token});
+        res.json({ token: token });
     },
     verify: async function (req, res) { // 계약서 생성 때 사용하는거
         if (!req.isAuth) {
@@ -67,7 +67,7 @@ module.exports = {
             if (req.headers.contract_token == undefined) {
                 return res.json({ message: '요청을 처리하는 중 오류가 발생하였습니다.' })
             }
-            let {contract_token} = req.headers
+            let { contract_token } = req.headers
             let token_data = await req.redis_client.get(`contract_access_token_${contract_token}`)
             if (token_data == undefined) {
                 console.log(token_data)
@@ -121,7 +121,7 @@ module.exports = {
                 verify: false
             })
         } else {
-            let db_data = {
+            let db_data = { // 필요한 부분만 암호화 하면 될거같은데
                 secret: crypto.decrypt(find_contract.dataValues.secret),
                 contract_uuid: find_contract.dataValues.contract_uuid,
                 company_name: crypto.decrypt(find_contract.dataValues.company_name),
@@ -193,8 +193,8 @@ module.exports = {
                     kookmin: false
                 },
                 document: {
-                   agreement: false,
-                   family: false,
+                    agreement: false,
+                    family: false,
                 }
             }
             db_data = {
@@ -232,9 +232,9 @@ module.exports = {
             // 계약서 redis 정보 삭제
             console.log(`contract_access_token_${req.body.contract_access_token}`)
             await req.redis_client.del(`contract_access_token_${req.body.contract_access_token}`)
-            console.log("방근 만들어진 계약서 접속 인증번호: "+contract_secret)
-            console.log("그리고 계약서 uuid: "+contract_uuid)
-            res.json({status:'success'}) // 여기서 요청 보내주고 아래에서 문자는 돌아감.
+            console.log("방근 만들어진 계약서 접속 인증번호: " + contract_secret)
+            console.log("그리고 계약서 uuid: " + contract_uuid)
+            res.json({ status: 'success' }) // 여기서 요청 보내주고 아래에서 문자는 돌아감.
 
             let worker_uuid = contract_body_data.worker_uuid;
             let owner_uuid = contract_body_data.ceo_uuid
@@ -251,13 +251,13 @@ module.exports = {
             // [SMS전송-옵션1] SOLAPI
             messageService.send([
                 {
-                from: process.env.SOLAPI_API_FROM_NUMBER,
-                to: worker_info.phone_number,
-                text: `안녕하세요, 전자근로계약서가 ${worker_info.name}님 에게 도착했어요. 아래 주소에서 내용을 확인 후, 동의한다면 동의 버튼을 눌러주세요.\r\n\r\n- 주소: https://jsw2022.pages.dev/contract/confirm/${contract_uuid}\r\n- 접속 인증번호: ${contract_secret}\r\n- 동의 시 계약은 즉시 체결되며, 계약서를 확인할 수 있는 주소를 문자로 보내드립니다.`,
-                //subject: "문자 제목" // 제목쓰면 내용이 짧아도 자동으로 LMS로 넘어감. 쓰지마셈.
+                    from: process.env.SOLAPI_API_FROM_NUMBER,
+                    to: worker_info.phone_number,
+                    text: `안녕하세요, 전자근로계약서가 ${worker_info.name}님 에게 도착했어요. 아래 주소에서 내용을 확인 후, 동의한다면 동의 버튼을 눌러주세요.\r\n\r\n- 주소: https://jsw2022.pages.dev/contract/confirm/${contract_uuid}\r\n- 접속 인증번호: ${contract_secret}\r\n- 동의 시 계약은 즉시 체결되며, 계약서를 확인할 수 있는 주소를 문자로 보내드립니다.`,
+                    //subject: "문자 제목" // 제목쓰면 내용이 짧아도 자동으로 LMS로 넘어감. 쓰지마셈.
                 },
                 // 배열형태로 최대 10,000건까지 동시 전송가능
-              ]).then(res => console.log(res.groupInfo.log[1].message + "\n" +res.groupInfo.log[2].message));
+            ]).then(res => console.log(res.groupInfo.log[1].message + "\n" + res.groupInfo.log[2].message));
 
 
             // [SMS 전송-옵션2] - 네이버 클라우드 플랫폼 이용 // 비용문제로 진짜 테스트하거나 시연할 때 아니면 주석처리.
@@ -314,4 +314,23 @@ module.exports = {
             //     })
         }
     },
+    confirm: async function (req, res) {
+        if (!req.isAuth || req.body.code == undefined || req.body.contract_uuid == undefined) {
+            // 로그인 필수
+            res.status(401);
+            return res.json({ message: "요청을 처리하는 중 오류가 발생하였습니다." });
+        }
+        //req.params.contract_uuid
+        if(req.body.choice == true){
+            Store.update({isConfirmed: true}, {where:{contract_uuid: req.params.contract_uuid}})
+            .then(result => {
+                res.status(200);
+                res.json({message: "요청이 잘 수행 되었습니다."});
+            })
+            .catch(err => {
+                res.status(500);
+                res.json({message: "알 수 없는 오류가 발생했습니다."});
+            });
+        }
+    }
 };

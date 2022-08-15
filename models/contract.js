@@ -64,6 +64,10 @@ module.exports = (sequelize, DataTypes) => {
         },
         worker_name: DataTypes.TEXT,
         work_rest_day: DataTypes.TEXT,
+        isConfirmed: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
     }, {
         sequelize,
         modelName: 'Contract',

@@ -20,15 +20,15 @@ const storeController = require("./store.controller");
  *                    items:
  *                      oneOf:
  *                      - type: object
- *                        example: {"store_uuid":null,"name":"test1","lat":36.62730948983622,"lon":127.51195958283104,"description":"함께 미래를 만들어 나가는 가게","heart":28,"address":"대한민국 충청북도 청주시","owner_uuid":"","phone_number":null,"createdAt":"2022-07-21T11:28:39.000Z","updatedAt":"2022-07-21T11:28:40.000Z"}
+ *                        example: {"store_uuid":null,"name":"test1","lat":36.62730948983622,"lon":127.51195958283104,"description":"함께 미래를 만들어 나가는 가게","heart":28,"address":"대한민국 충청북도 청주시","owner_uuid":"","phone_number":null,"createdAt":"2022-07-21T11:28:39.000Z","updatedAt":"2022-07-21T11:28:40.000Z", "worker_cnt": 1, "receivedContract_cnt": 0}
  *                      - type: object
- *                        example: {"store_uuid":null,"name":"test2","lat":36.63010046569394,"lon":127.51671854407964,"description":"서울서울 서울서울서울","heart":777,"address":"대한민국 서울서울서울 서울 경기도","owner_uuid":"5dd3ac68-ee4d-4d23-9ff4-f24c074395e6","phone_number":null,"createdAt":"2022-07-21T11:34:21.000Z","updatedAt":"2022-07-21T11:34:21.000Z"}
+ *                        example: {"store_uuid":null,"name":"test2","lat":36.63010046569394,"lon":127.51671854407964,"description":"서울서울 서울서울서울","heart":777,"address":"대한민국 서울서울서울 서울 경기도","owner_uuid":"5dd3ac68-ee4d-4d23-9ff4-f24c074395e6","phone_number":null,"createdAt":"2022-07-21T11:34:21.000Z","updatedAt":"2022-07-21T11:34:21.000Z", "worker_cnt": 1, "receivedContract_cnt": 0}
  *                      - type: object
- *                        example: {"store_uuid":null,"name":"파리바게트 실리콘밸리점","lat":null,"lon":null,"description":"빵집","heart":1234,"address":"충청북도 청주시 상당구 용정로 35","owner_uuid":"5dd3ac68-ee4d-4d23-9ff4-f24c074395e6","phone_number":null,"createdAt":"2022-07-22T05:28:32.000Z","updatedAt":"2022-07-22T05:28:32.000Z"}
+ *                        example: {"store_uuid":null,"name":"파리바게트 실리콘밸리점","lat":null,"lon":null,"description":"빵집","heart":1234,"address":"충청북도 청주시 상당구 용정로 35","owner_uuid":"5dd3ac68-ee4d-4d23-9ff4-f24c074395e6","phone_number":null,"createdAt":"2022-07-22T05:28:32.000Z","updatedAt":"2022-07-22T05:28:32.000Z", "worker_cnt": 1, "receivedContract_cnt": 0}
  *                      - type: object
- *                        example: {"store_uuid":"944d0494-4b94-4512-a3ec-a4a8b173de20","name":"태진마라안팔아","lat":1,"lon":2,"description":"마라탕가겐데 진짜로 마라탕 안판다니깐요","heart":0,"address":"대한민국 어딘가","owner_uuid":"9e93a1f6-bee1-4259-9951-0e4b4b919a91","phone_number":"010-0000-0000","createdAt":"2022-07-22T12:50:17.000Z","updatedAt":"2022-07-22T12:51:18.000Z"}
+ *                        example: {"store_uuid":"944d0494-4b94-4512-a3ec-a4a8b173de20","name":"태진마라안팔아","lat":1,"lon":2,"description":"마라탕가겐데 진짜로 마라탕 안판다니깐요","heart":0,"address":"대한민국 어딘가","owner_uuid":"9e93a1f6-bee1-4259-9951-0e4b4b919a91","phone_number":"010-0000-0000","createdAt":"2022-07-22T12:50:17.000Z","updatedAt":"2022-07-22T12:51:18.000Z", "worker_cnt": 1, "receivedContract_cnt": 0}
  *                      - type: object
- *                        example: {"store_uuid":null,"name":"carrot","lat":36.62059464826237,"lon":127.4681851469787,"description":"계승·발전과 있을 모든 경우와 국민은.","heart":325,"address":"48964 상읍","owner_uuid":"ea737dea-9ab4-49d9-9a8c-54b5898d6ce2","phone_number":"010-3191-9007","createdAt":"2022-08-08T15:29:24.000Z","updatedAt":"2022-08-08T15:29:24.000Z"}
+ *                        example: {"store_uuid":null,"name":"carrot","lat":36.62059464826237,"lon":127.4681851469787,"description":"계승·발전과 있을 모든 경우와 국민은.","heart":325,"address":"48964 상읍","owner_uuid":"ea737dea-9ab4-49d9-9a8c-54b5898d6ce2","phone_number":"010-3191-9007","createdAt":"2022-08-08T15:29:24.000Z","updatedAt":"2022-08-08T15:29:24.000Z", "worker_cnt": 1, "receivedContract_cnt": 0}
  *        "500":
  *          description: 알 수 없는 오류 발생
  *          content:
@@ -98,6 +98,12 @@ storeRouter.get("/stores", storeController.getAllStores);
  *                  updatedAt:
  *                    type: string
  *                    example: 2022-07-21T11:28:40.000Z
+ *                  worker_cnt:
+ *                    type: integer
+ *                    example: 1
+ *                  receivedContract_cnt:
+ *                    type: integer
+ *                    example: 12
  *         404:
  *           description: 존재하지 않는 가게 uuid
  *           content:
@@ -131,7 +137,7 @@ storeRouter.get("/getInfo", storeController.getInfo);
  *        - application/json
  *        responses:
  *         200:
- *          description: 가게 정보
+ *          description: 가게 정보 (배열이 올 수 있음)
  *          content:
  *            application/json:
  *              schema:
@@ -170,6 +176,12 @@ storeRouter.get("/getInfo", storeController.getInfo);
  *                  updatedAt:
  *                    type: string
  *                    example: 2022-07-21T11:28:40.000Z
+ *                  worker_cnt:
+ *                    type: integer
+ *                    example: 1
+ *                  receivedContract_cnt:
+ *                    type: integer
+ *                    example: 12
  *         404:
  *           description: 가게를 찾을 수 없음.
  *           content:
@@ -298,15 +310,15 @@ storeRouter.post("/registration", storeController.registration);
  *                items:
  *                  oneOf:
  *                  - type: object
- *                    example: {"store_uuid":null,"name":"test1","lat":36.62730948983622,"lon":127.51195958283104,"description":"함께 미래를 만들어 나가는 가게","heart":28,"address":"대한민국 충청북도 청주시","owner_uuid":"","phone_number":null,"createdAt":"2022-07-21T11:28:39.000Z","updatedAt":"2022-07-21T11:28:40.000Z"}
+ *                    example: {"store_uuid":null,"name":"test1","lat":36.62730948983622,"lon":127.51195958283104,"description":"함께 미래를 만들어 나가는 가게","heart":28,"address":"대한민국 충청북도 청주시","owner_uuid":"","phone_number":null,"createdAt":"2022-07-21T11:28:39.000Z","updatedAt":"2022-07-21T11:28:40.000Z", "worker_cnt": 1, "receivedContract_cnt": 0}
  *                  - type: object
- *                    example: {"store_uuid":null,"name":"test2","lat":36.63010046569394,"lon":127.51671854407964,"description":"서울서울 서울서울서울","heart":777,"address":"대한민국 서울서울서울 서울 경기도","owner_uuid":"5dd3ac68-ee4d-4d23-9ff4-f24c074395e6","phone_number":null,"createdAt":"2022-07-21T11:34:21.000Z","updatedAt":"2022-07-21T11:34:21.000Z"}
+ *                    example: {"store_uuid":null,"name":"test2","lat":36.63010046569394,"lon":127.51671854407964,"description":"서울서울 서울서울서울","heart":777,"address":"대한민국 서울서울서울 서울 경기도","owner_uuid":"5dd3ac68-ee4d-4d23-9ff4-f24c074395e6","phone_number":null,"createdAt":"2022-07-21T11:34:21.000Z","updatedAt":"2022-07-21T11:34:21.000Z", "worker_cnt": 1, "receivedContract_cnt": 0}
  *                  - type: object
- *                    example: {"store_uuid":null,"name":"파리바게트 실리콘밸리점","lat":null,"lon":null,"description":"빵집","heart":1234,"address":"충청북도 청주시 상당구 용정로 35","owner_uuid":"5dd3ac68-ee4d-4d23-9ff4-f24c074395e6","phone_number":null,"createdAt":"2022-07-22T05:28:32.000Z","updatedAt":"2022-07-22T05:28:32.000Z"}
+ *                    example: {"store_uuid":null,"name":"파리바게트 실리콘밸리점","lat":null,"lon":null,"description":"빵집","heart":1234,"address":"충청북도 청주시 상당구 용정로 35","owner_uuid":"5dd3ac68-ee4d-4d23-9ff4-f24c074395e6","phone_number":null,"createdAt":"2022-07-22T05:28:32.000Z","updatedAt":"2022-07-22T05:28:32.000Z", "worker_cnt": 1, "receivedContract_cnt": 0}
  *                  - type: object
- *                    example: {"store_uuid":"944d0494-4b94-4512-a3ec-a4a8b173de20","name":"태진마라안팔아","lat":1,"lon":2,"description":"마라탕가겐데 진짜로 마라탕 안판다니깐요","heart":0,"address":"대한민국 어딘가","owner_uuid":"9e93a1f6-bee1-4259-9951-0e4b4b919a91","phone_number":"010-0000-0000","createdAt":"2022-07-22T12:50:17.000Z","updatedAt":"2022-07-22T12:51:18.000Z"}
+ *                    example: {"store_uuid":"944d0494-4b94-4512-a3ec-a4a8b173de20","name":"태진마라안팔아","lat":1,"lon":2,"description":"마라탕가겐데 진짜로 마라탕 안판다니깐요","heart":0,"address":"대한민국 어딘가","owner_uuid":"9e93a1f6-bee1-4259-9951-0e4b4b919a91","phone_number":"010-0000-0000","createdAt":"2022-07-22T12:50:17.000Z","updatedAt":"2022-07-22T12:51:18.000Z", "worker_cnt": 1, "receivedContract_cnt": 0}
  *                  - type: object
- *                    example: {"store_uuid":null,"name":"carrot","lat":36.62059464826237,"lon":127.4681851469787,"description":"계승·발전과 있을 모든 경우와 국민은.","heart":325,"address":"48964 상읍","owner_uuid":"ea737dea-9ab4-49d9-9a8c-54b5898d6ce2","phone_number":"010-3191-9007","createdAt":"2022-08-08T15:29:24.000Z","updatedAt":"2022-08-08T15:29:24.000Z"}
+ *                    example: {"store_uuid":null,"name":"carrot","lat":36.62059464826237,"lon":127.4681851469787,"description":"계승·발전과 있을 모든 경우와 국민은.","heart":325,"address":"48964 상읍","owner_uuid":"ea737dea-9ab4-49d9-9a8c-54b5898d6ce2","phone_number":"010-3191-9007","createdAt":"2022-08-08T15:29:24.000Z","updatedAt":"2022-08-08T15:29:24.000Z", "worker_cnt": 1, "receivedContract_cnt": 0}
  *         401:
  *           description: 인증 되지 않은 상태에서 접근
  *           content:
