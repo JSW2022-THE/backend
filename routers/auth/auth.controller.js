@@ -230,11 +230,16 @@ module.exports = {
         message: "로그인 정보 오류, 다시 로그인 하세요.",
       });
 
-    const userType = await User.findOne({
-      attributes: ["category"],
+    const userData = await User.findOne({
+      attributes: ["category", "name", "phone_number"],
       where: { uuid: req.userUuid },
     });
 
-    res.json({ uuid: req.userUuid, type: userType.category });
+    res.json({
+      uuid: req.userUuid,
+      type: userData.category,
+      name: userData.name,
+      phone_number: userData.phone_number,
+    });
   },
 };
