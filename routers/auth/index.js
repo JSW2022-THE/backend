@@ -39,6 +39,6 @@ const authController = require("./auth.controller");
 authRouter.post("/login", authController.login);
 authRouter.get("/check/tos", authController.getTosCheck);
 authRouter.post("/new/user", authController.setNewUserData);
-authRouter.get("/getLoggedInUserUUID", authController.getLoggedInUserUUID);
+authRouter.get("/getLoggedInUserInfo", authController.getLoggedInUserInfo);
 
 module.exports = authRouter;
