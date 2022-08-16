@@ -4,6 +4,7 @@ const store = require("./store");
 const auth = require("./auth");
 const chat = require("./chat");
 const contract = require("./contract");
+const review = require("./review");
 
 /**
  * @swagger
@@ -44,5 +45,13 @@ router.use("/chat", chat);
  *  description: 계약서
  */
 router.use("/contract", contract);
+
+/**
+ * @swagger
+ * tags:
+ *  name: Review
+ *  description: 스토어 리뷰
+ */
+router.use("/review", review);
 
 module.exports = router;
