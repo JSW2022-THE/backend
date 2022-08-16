@@ -23,17 +23,16 @@ module.exports = {
   getInfoByOwnerId: function (req, res) {
     if (!req.isAuth) {
       // 로그인 필수
-      res.status(401);
-      return res.json({
+      return res.status(401).json({
         message: "요청을 처리하는 중 오류가 발생하였습니다.",
       });
     }
-    
-    Store.findAll({
+
+    Store.findOne({
       where: { owner_uuid: req.userUuid },
     }).then(function (result) {
       if (result != null) {
-        res.json(result.dataValues);
+        res.json(result);
       } else {
         res.status(404);
         res.json({ message: "존재하지 않는 가게입니다." });
@@ -163,8 +162,8 @@ module.exports = {
           var a =
             Math.pow(Math.sin(deltaLat / 2), 2) +
             Math.cos((userLat * Math.PI) / 180) *
-            Math.cos((data.dataValues.lat * Math.PI) / 180) *
-            Math.pow(Math.sin(deltaLon / 2));
+              Math.cos((data.dataValues.lat * Math.PI) / 180) *
+              Math.pow(Math.sin(deltaLon / 2));
           var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
           var d = 6371 * c;
 
@@ -217,5 +216,19 @@ module.exports = {
           });
       }
     }
+  },
+  modifyStoreInfo: async (req, res) => {
+    const modifiedData = req.body;
+    Store.update(
+      {
+        name: modifiedData.name,
+        phone_number: modifiedData.phone_number,
+        description: modifiedData.description,
+        address: modifiedData.address,
+      },
+      { where: { store_uuid: modifiedData.store_uuid } }
+    ).then(() => {
+      res.send("스토어정보 업데이트 완료");
+    });
   },
 };

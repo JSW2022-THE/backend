@@ -41,7 +41,6 @@ const storeController = require("./store.controller");
  */
 storeRouter.get("/stores", storeController.getAllStores);
 
-
 /**
  * @swagger
  * paths:
@@ -125,7 +124,6 @@ storeRouter.get("/stores", storeController.getAllStores);
  */
 storeRouter.get("/getInfo", storeController.getInfo);
 
-
 /**
  * @swagger
  * paths:
@@ -202,7 +200,6 @@ storeRouter.get("/getInfo", storeController.getInfo);
  *                     example: 요청을 처리하는 중 오류가 발생하였습니다.
  */
 storeRouter.get("/getInfoByOwnerId", storeController.getInfoByOwnerId);
-
 
 /**
  * @swagger
@@ -331,7 +328,6 @@ storeRouter.post("/registration", storeController.registration);
  */
 storeRouter.get("/getNearBy", storeController.getNearBy);
 
-
 /**
  * @swagger
  * paths:
@@ -388,5 +384,7 @@ storeRouter.get("/getNearBy", storeController.getNearBy);
  *                     example: 알 수 없는 오류가 발생했습니다.
  */
 storeRouter.post("/addHeart", storeController.addHeart);
+
+storeRouter.post("/modifyStoreInfo", storeController.modifyStoreInfo);
 
 module.exports = storeRouter;

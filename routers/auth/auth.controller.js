@@ -237,15 +237,10 @@ module.exports = {
       });
 
     const userData = await User.findOne({
-      attributes: ["category", "name", "phone_number"],
+      attributes: ["category", "name", "phone_number", "age", "uuid"],
       where: { uuid: req.userUuid },
     });
 
-    res.json({
-      uuid: req.userUuid,
-      type: userData.category,
-      name: userData.name,
-      phone_number: userData.phone_number,
-    });
+    res.json(userData);
   },
 };
