@@ -201,14 +201,14 @@ module.exports = {
         res.cookie("access_token", access_token, {
           secure: true,
           httpOnly: true,
-          sameSite: "None",
+          //sameSite: "None",
           maxAge: 1000 * 60 * 60 * 6, // 6시간
           path: "/",
         });
         res.cookie("refresh_token", refresh_token, {
           secure: true,
           httpOnly: true,
-          sameSite: "None",
+          //sameSite: "None",
           maxAge: 1000 * 60 * 60 * 24 * 14, // 14일
         });
         res.json(res_data);
@@ -221,6 +221,12 @@ module.exports = {
           message: "요청을 처리하는 중 오류가 발생하였습니다.",
         });
       });
+  },
+  logout: (req, res) => {
+    console.log("로그아웃 : ", req.userUuid);
+    res.clearCookie("access_token");
+    res.clearCookie("refresh_token");
+    res.send("로그아웃 되었습니다.");
   },
 
   getLoggedInUserInfo: async (req, res) => {
