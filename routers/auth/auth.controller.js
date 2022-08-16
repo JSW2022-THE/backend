@@ -201,14 +201,14 @@ module.exports = {
         res.cookie("access_token", access_token, {
           secure: true,
           httpOnly: true,
-          //sameSite: "None",
+          sameSite: "Lax",
           maxAge: 1000 * 60 * 60 * 6, // 6시간
           path: "/",
         });
         res.cookie("refresh_token", refresh_token, {
           secure: true,
           httpOnly: true,
-          //sameSite: "None",
+          sameSite: "Lax",
           maxAge: 1000 * 60 * 60 * 24 * 14, // 14일
         });
         res.json(res_data);
