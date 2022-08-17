@@ -206,4 +206,35 @@ module.exports = {
       return res.status(500).json({ message: "알 수 없는 오류가 발생했습니다." });
     })
   }*/
+
+  // high cost and very slow function
+  getWorkInfo: function (req, res) {
+    if (!req.isAuth) {
+      // 로그인 필수
+      return res.json({
+        message: "요청을 처리하는 중 오류가 발생하였습니다.",
+      });
+    }
+
+    if (req.body.company_name == undefined || req.body.ceo_name == undefined || req.body.worker_name == undefined) return res.status(400).json({ message: "필요한 값들 중 일부가 비어있습니다." });
+
+    //이부분 진짜 맘에 안드네
+    Contract.findAll({}).then(reqRes => {
+      for (var i = 0; i < reqRes.length; i++) {
+        if (crypto.decrypt(reqRes[i].dataValues.company_name) == req.body.company_name &&
+          crypto.decrypt(reqRes[i].dataValues.ceo_name) == req.body.ceo_name &&
+          crypto.decrypt(reqRes[i].dataValues.worker_name) == req.body.worker_name) {
+            var finalData = {
+              company_name: crypto.decrypt(reqRes[i].dataValues.company_name),
+              wage_value: crypto.decrypt(reqRes[i].dataValues.wage_value),
+              work_week_time: crypto.decrypt(reqRes[i].dataValues.work_week_time),
+              work_start_time: crypto.decrypt(reqRes[i].dataValues.work_start_time),
+              work_end_time: crypto.decrypt(reqRes[i].dataValues.work_end_time)
+            }
+
+            return res.status(200).json(finalData);
+        }
+      }
+    })
+  }
 };

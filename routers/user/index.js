@@ -37,4 +37,6 @@ userRouter.post("/modifyUserInfo", userController.modifyUserInfo);
 
 //userRouter.get("/predictSalary", userController.predictSalary);
 
+userRouter.get("/getWorkInfo", userController.getWorkInfo);
+
 module.exports = userRouter;
