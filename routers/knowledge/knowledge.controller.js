@@ -5,11 +5,11 @@ var init = false;
 
 (function () {
     if (!init) {
-        var fs = require('fs');
-        fs.readFile('./data.json', 'utf8', function (err, data) {
-            if (err) throw err;
-            question = JSON.parse(data);
-        });
+        const axios = require("axios");
+        axios({ method: "get", url: "https://jsw2022.pages.dev/knowledgeData.json" })
+        .then(axiosData => {
+             question = axiosData.data
+            });
         init = true;
     }
 })();
@@ -24,7 +24,7 @@ module.exports = {
         try {
             var rndIdx = Math.floor(Math.random() * (question.length)); //최댓값은 제외, 최솟값은 포함
             res.status(200);
-            res.json({ question: question[rndIdx].question, answer: question[rndIdx].answer, detail: question[rndIdx].detail});  // 나와라! 어지러운 코드!
+            res.json({ question: question[rndIdx].question, answer: question[rndIdx].answer, detail: question[rndIdx].detail });  // 나와라! 어지러운 코드!
         } catch (error) {
             console.log(error);
             res.status(500);
