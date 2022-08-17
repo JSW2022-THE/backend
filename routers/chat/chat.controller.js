@@ -1,5 +1,6 @@
 const { User, ChatRooms, Chats } = require("../../models");
 const { Op } = require("sequelize");
+const uuid = require("uuid");
 
 module.exports = {
   getChatRooms: async (req, res) => {
@@ -33,9 +34,41 @@ module.exports = {
 
     res.json({ status: 200, data: resultChatData });
   },
-  createChatRoom: (req, res) => {
-    console.log("dd");
+
+  createChatRoom: async (req, res) => {
+    const createdRoomId = uuid.v4();
+    if (!req.isAuth) return res.status(403).send("로그인하고 오세요");
+
+    const user_uuid = req.userUuid;
+    const user_name = await User.findOne({
+      attributes: ["name"],
+      where: { uuid: user_uuid },
+    });
+
+    const target_uuid = req.body.target_uuid;
+    const target_name = await User.findOne({
+      attributes: ["name"],
+      where: { uuid: target_uuid },
+    });
+
+    const peopleDataStringfy = JSON.stringify([
+      { uuid: user_uuid, name: user_name.name },
+      { uuid: target_uuid, name: target_name.name },
+    ]);
+    ChatRooms.create({
+      room_id: createdRoomId,
+      people: peopleDataStringfy,
+      status: "open",
+      creator: user_uuid,
+    }).then(() => {
+      res.status(200).json({
+        status: 200,
+        message: "채팅룸을 잘 만들었습니다.",
+        created_chat_room_id: createdRoomId,
+      });
+    });
   },
+
   getChatRoomOnlineStatus: async (req, res) => {
     const user_uuid = req.userUuid;
     const room_id = req.body.room_id;
