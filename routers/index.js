@@ -6,6 +6,7 @@ const chat = require("./chat");
 const contract = require("./contract");
 const review = require("./review");
 const knowledge = require("./knowledge");
+const worker = require("./worker");
 
 /**
  * @swagger
@@ -61,6 +62,14 @@ router.use("/review", review);
  *  name: Knowledge
  *  description: 지식
  */
- router.use("/knowledge", knowledge);
+router.use("/knowledge", knowledge);
+
+/**
+ * @swagger
+ * tags:
+ *  name: Worker
+ *  description: 근로계약이 완료된 실제로 일하는 노동자 데이터
+ */
+router.use("/worker", worker);
 
 module.exports = router;
