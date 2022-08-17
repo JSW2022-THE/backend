@@ -6,7 +6,7 @@ var init = false;
 (function () {
     if (!init) {
         var fs = require('fs');
-        fs.readFile('data.json', 'utf8', function (err, data) {
+        fs.readFile('./data.json', 'utf8', function (err, data) {
             if (err) throw err;
             question = JSON.parse(data);
         });
