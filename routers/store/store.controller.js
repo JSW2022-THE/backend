@@ -219,6 +219,7 @@ module.exports = {
   },
   modifyStoreInfo: async (req, res) => {
     const modifiedData = req.body;
+    console.log(modifiedData);
     Store.update(
       {
         name: modifiedData.name,
