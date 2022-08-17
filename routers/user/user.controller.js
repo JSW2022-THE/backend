@@ -4,6 +4,11 @@ const resume = require("../../models/resume");
 // 실제 사용자 라우터 처리 로직
 const User = require("../../models").User;
 const Resume = require("../../models").Resume;
+const Contract = require("../../models").Contract;
+
+const crypto = require("../../modules/crypto")
+const _crypto = require("crypto");
+const { query } = require("express");
 
 module.exports = {
   getAllUsers: function (req, res) {
@@ -141,4 +146,64 @@ module.exports = {
       res.send("유저정보 업데이트 완료");
     });
   },
+  //아래 기능은 상의 필요
+  /*predictSalary: function (req, res) {
+    if (!req.isAuth) {
+      // 로그인 필수
+      return res.status(401).json({
+        message: "요청을 처리하는 중 오류가 발생하였습니다.",
+      });
+    }
+
+    if (req.body.contract_uuid == undefined) {
+      return res.status(400).json({ message: "uuid를 받지 못했습니다." });
+    }
+
+    Contract.findOne({
+      where: {
+        contract_uuid: req.body.contract_uuid
+      }
+    }).then(queryRes => {
+      if (queryRes == undefined) {
+        return res.status(404).json({ message: "찾을 수 없습니다." });
+      }
+      
+      var work_week_time, work_type, wage_type, wage_value;
+      work_week_time = crypto.decrypt(queryRes.dataValues.work_week_time); // 주간 일하는 시간, wage_type이 시급일때 하루 단기알바로 치고 계산하겠음.
+      work_type = crypto.decrypt(queryRes.dataValues.work_type).replace(/[^0-9\.]+/g, ""); // "주 n회"라는 규격을 가진다고 가정. n만 추출. 하루단기 알바 제외하고 쓸 예정
+      wage_type = crypto.decrypt(queryRes.dataValues.wage_type);// 시급?(단기알바?) 일급 주급 월급 연봉 
+      wage_value = crypto.decrypt(query.dataValues.wage_value); // 시간당 급여로 치고 계산하겠음.
+
+      var total_salary = 0;
+
+      switch (wage_type) {
+        case "시급":
+          total_salary = work_week_time*wage_value;
+          break;
+
+        case "일급":
+          total_salary = work_week_time*wage_value
+          break;
+
+        case "주급":
+
+          break;
+
+        case "월급":
+
+          break;
+
+        case "연봉":
+
+          break;
+
+      
+        default:
+          break;
+      }
+
+    }).catch(err => {
+      return res.status(500).json({ message: "알 수 없는 오류가 발생했습니다." });
+    })
+  }*/
 };

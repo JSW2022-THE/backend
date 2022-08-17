@@ -32,6 +32,9 @@ userRouter.get("/users", userController.getAllUsers);
 userRouter.post("/resume", userController.resume);
 
 userRouter.get("/getResume", userController.getResume);
+
 userRouter.post("/modifyUserInfo", userController.modifyUserInfo);
+
+//userRouter.get("/predictSalary", userController.predictSalary);
 
 module.exports = userRouter;

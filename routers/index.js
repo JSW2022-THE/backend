@@ -5,6 +5,7 @@ const auth = require("./auth");
 const chat = require("./chat");
 const contract = require("./contract");
 const review = require("./review");
+const knowledge = require("./knowledge");
 
 /**
  * @swagger
@@ -53,5 +54,13 @@ router.use("/contract", contract);
  *  description: 스토어 리뷰
  */
 router.use("/review", review);
+
+/**
+ * @swagger
+ * tags:
+ *  name: Knowledge
+ *  description: 지식
+ */
+ router.use("/knowledge", knowledge);
 
 module.exports = router;
