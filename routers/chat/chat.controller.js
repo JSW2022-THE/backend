@@ -52,8 +52,8 @@ module.exports = {
     });
 
     const peopleDataStringfy = JSON.stringify([
-      { uuid: user_uuid, name: user_name },
-      { uuid: target_uuid, name: target_name },
+      { uuid: user_uuid, name: user_name.name },
+      { uuid: target_uuid, name: target_name.name },
     ]);
     ChatRooms.create({
       room_id: createdRoomId,
