@@ -11,24 +11,27 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Store.init({
-    store_uuid: {
-      type: DataTypes.STRING(36),
-      primaryKey: true,
+  Store.init(
+    {
+      store_uuid: {
+        type: DataTypes.STRING(36),
+        primaryKey: true,
+      },
+      name: DataTypes.STRING,
+      lat: DataTypes.DOUBLE,
+      lon: DataTypes.DOUBLE,
+      description: DataTypes.STRING(5000),
+      heart: DataTypes.BIGINT,
+      address: DataTypes.STRING,
+      owner_uuid: DataTypes.STRING,
+      phone_number: DataTypes.STRING,
+      worker_cnt: DataTypes.INTEGER,
+      received_resume_cnt: DataTypes.BIGINT,
     },
-    name: DataTypes.STRING,
-    lat: DataTypes.DOUBLE,
-    lon: DataTypes.DOUBLE,
-    description: DataTypes.STRING(5000),
-    heart: DataTypes.BIGINT,
-    address: DataTypes.STRING,
-    owner_uuid: DataTypes.STRING,
-    phone_number: DataTypes.STRING,
-    worker_cnt: DataTypes.INTEGER,
-    receivedContract_cnt: DataTypes.BIGINT
-  }, {
-    sequelize,
-    modelName: 'Store',
-  });
+    {
+      sequelize,
+      modelName: "Store",
+    }
+  );
   return Store;
 };
