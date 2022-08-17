@@ -27,6 +27,12 @@ module.exports = (sequelize, DataTypes) => {
       phone_number: DataTypes.STRING,
       worker_cnt: DataTypes.INTEGER,
       received_resume_cnt: DataTypes.BIGINT,
+      collect_state: DataTypes.STRING,
+      collect_desc: DataTypes.TEXT("long"),
+      collect_money: DataTypes.INTEGER,
+      collect_position: DataTypes.STRING,
+      collect_time: DataTypes.STRING,
+      collect_person_cnt: DataTypes.INTEGER,
     },
     {
       sequelize,
