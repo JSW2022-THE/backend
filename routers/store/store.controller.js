@@ -225,6 +225,12 @@ module.exports = {
         phone_number: modifiedData.phone_number,
         description: modifiedData.description,
         address: modifiedData.address,
+        collect_activate: modifiedData.collect_activate,
+        collect_money: modifiedData.collect_money,
+        collect_desc: modifiedData.collect_desc,
+        collect_position: modifiedData.collect_position,
+        collect_time: modifiedData.collect_time,
+        collect_person_cnt: modifiedData.collect_person_cnt,
       },
       { where: { store_uuid: modifiedData.store_uuid } }
     ).then(() => {
