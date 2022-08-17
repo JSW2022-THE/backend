@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
       },
       name: DataTypes.STRING,
+      type: DataTypes.STRING,
       lat: DataTypes.DOUBLE,
       lon: DataTypes.DOUBLE,
       description: DataTypes.STRING(5000),
