@@ -1,12 +1,11 @@
 const db = require("../../models");
-const resume = require("../../models/resume");
 
 // 실제 사용자 라우터 처리 로직
 const User = require("../../models").User;
 const Resume = require("../../models").Resume;
 const Contract = require("../../models").Contract;
 
-const crypto = require("../../modules/crypto")
+const crypto = require("../../modules/crypto");
 const _crypto = require("crypto");
 const { query } = require("express");
 
@@ -216,25 +215,38 @@ module.exports = {
       });
     }
 
-    if (req.body.company_name == undefined || req.body.ceo_name == undefined || req.body.worker_name == undefined) return res.status(400).json({ message: "필요한 값들 중 일부가 비어있습니다." });
+    if (
+      req.body.company_name == undefined ||
+      req.body.ceo_name == undefined ||
+      req.body.worker_name == undefined
+    )
+      return res
+        .status(400)
+        .json({ message: "필요한 값들 중 일부가 비어있습니다." });
 
     //이부분 진짜 맘에 안드네
-    Contract.findAll({}).then(reqRes => {
+    Contract.findAll({}).then((reqRes) => {
       for (var i = 0; i < reqRes.length; i++) {
-        if (crypto.decrypt(reqRes[i].dataValues.company_name) == req.body.company_name &&
+        if (
+          crypto.decrypt(reqRes[i].dataValues.company_name) ==
+            req.body.company_name &&
           crypto.decrypt(reqRes[i].dataValues.ceo_name) == req.body.ceo_name &&
-          crypto.decrypt(reqRes[i].dataValues.worker_name) == req.body.worker_name) {
-            var finalData = {
-              company_name: crypto.decrypt(reqRes[i].dataValues.company_name),
-              wage_value: crypto.decrypt(reqRes[i].dataValues.wage_value),
-              work_week_time: crypto.decrypt(reqRes[i].dataValues.work_week_time),
-              work_start_time: crypto.decrypt(reqRes[i].dataValues.work_start_time),
-              work_end_time: crypto.decrypt(reqRes[i].dataValues.work_end_time)
-            }
+          crypto.decrypt(reqRes[i].dataValues.worker_name) ==
+            req.body.worker_name
+        ) {
+          var finalData = {
+            company_name: crypto.decrypt(reqRes[i].dataValues.company_name),
+            wage_value: crypto.decrypt(reqRes[i].dataValues.wage_value),
+            work_week_time: crypto.decrypt(reqRes[i].dataValues.work_week_time),
+            work_start_time: crypto.decrypt(
+              reqRes[i].dataValues.work_start_time
+            ),
+            work_end_time: crypto.decrypt(reqRes[i].dataValues.work_end_time),
+          };
 
-            return res.status(200).json(finalData);
+          return res.status(200).json(finalData);
         }
       }
-    })
-  }
+    });
+  },
 };

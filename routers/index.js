@@ -7,6 +7,7 @@ const contract = require("./contract");
 const review = require("./review");
 const knowledge = require("./knowledge");
 const worker = require("./worker");
+const resume = require("./resume");
 
 /**
  * @swagger
@@ -71,5 +72,13 @@ router.use("/knowledge", knowledge);
  *  description: 근로계약이 완료된 실제로 일하는 노동자 데이터
  */
 router.use("/worker", worker);
+
+/**
+ * @swagger
+ * tags:
+ *  name: Resume
+ *  description: 이력서
+ */
+router.use("/resume", resume);
 
 module.exports = router;
