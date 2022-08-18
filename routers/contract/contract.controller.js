@@ -1,4 +1,4 @@
-const { Store, User } = require("../../models");
+const { Store, User, contractStore } = require("../../models");
 const contract = require("../../models").Contract;
 const jwt = require("jsonwebtoken");
 //const { json } = require("sequelize/types");
@@ -100,6 +100,84 @@ module.exports = {
             return res.json({ result: false })
         }
     },
+    confirmContract: async function (req, res) {
+        // 로그인 확인 필요 없음
+        if (req.body.contract_uuid == undefined) {
+            return res.json({
+                message: '요청을 처리하는 중 오류가 발생하였습니다.'
+            })
+        }
+
+        console.log(req.body.secret)
+        let findContract = await contract.findOne({
+            where: {
+                contract_uuid: req.body.contract_uuid,
+                secret: crypto.encrypt(req.body.secret)
+            },
+        })
+
+        if( findContract == undefined) {
+            return res.json({
+                message: '요청을 처리하는 중 오류가 발생하였습니다.' // 비밀번호, uuid 둘 중 하나라도 안맞으면 전송
+            })
+        }
+
+        try {
+            await contractStore.create({
+                store_uuid: findContract.dataValues.company_uuid,
+                worker_uuid: req.body.worker_uuid,
+                contract_uuid: req.body.contract_uuid
+            })
+
+            await contract.update({
+                isConfirmed: true,
+                worker_sign_data_url: req.body.worker_sign_data_url
+            }, {
+                where: {
+                    contract_uuid: req.body.contract_uuid
+                }
+            })
+
+            res.json({
+                status:'ok'
+            })
+
+            // [SMS전송-옵션1] SOLAPI
+            let worker_info = await User.findOne({
+                where: {
+                    uuid: findContract.dataValues.worker_uuid
+                }
+            })
+            let owner_info = await User.findOne({
+                where: {
+                    uuid: findContract.dataValues.owner_uuid,
+                }
+            })
+            messageService.send([
+                {
+                    from: process.env.SOLAPI_API_FROM_NUMBER,
+                    to: worker_info.phone_number,
+                    text: `안녕하세요 근로자님!, 전자근로계약서가 ${findContract.dataValues.worker_name}님 에게 도착했어요. 계약이 방금 [체결] 되었습니다.\r\n\r\n근로계약서 확인: https://jsw2022.hserver.kr/contract/confirm/${req.body.contract_uuid}?check=true`,
+                    //subject: "문자 제목" // 제목쓰면 내용이 짧아도 자동으로 LMS로 넘어감. 쓰지마셈.
+                },
+                // 배열형태로 최대 10,000건까지 동시 전송가능
+            ]).then(res => console.log(res.groupInfo.log[1].message + "\n" + res.groupInfo.log[2].message));
+            messageService.send([
+                {
+                    from: process.env.SOLAPI_API_FROM_NUMBER,
+                    to: owner_info.phone_number,
+                    text: `안녕하세요 사업주ㅎ님!, 전자근로계약서가 ${findContract.dataValues.worker_name}님 에게 도착했어요. 계약이 방금 [체결] 되었습니다.\r\n\r\n근로계약서 확인: https://jsw2022.hserver.kr/contract/confirm/${req.body.contract_uuid}?check=true`,
+                    //subject: "문자 제목" // 제목쓰면 내용이 짧아도 자동으로 LMS로 넘어감. 쓰지마셈.
+                },
+                // 배열형태로 최대 10,000건까지 동시 전송가능
+            ]).then(res => console.log(res.groupInfo.log[1].message + "\n" + res.groupInfo.log[2].message));
+        } catch (e) {
+            return res.json({
+                status: 'bad'
+            })
+        }
+
+    },
     getContract: async function (req, res) {
         // if (!req.isAuth || req.body.code == undefined || req.body.contract_uuid == undefined) {
         //     // 로그인 필수
@@ -122,6 +200,8 @@ module.exports = {
             })
         } else {
             let db_data = { // 필요한 부분만 암호화 하면 될거같은데
+                worker_uuid: find_contract.dataValues.worker_uuid,
+                company_uuid: find_contract.dataValues.company_uuid,
                 secret: crypto.decrypt(find_contract.dataValues.secret),
                 contract_uuid: find_contract.dataValues.contract_uuid,
                 company_name: crypto.decrypt(find_contract.dataValues.company_name),
@@ -199,6 +279,9 @@ module.exports = {
             }
             db_data = {
                 ...db_data,
+                owner_uuid: contract_body_data.ceo_uuid,
+                worker_uuid: contract_body_data.worker_uuid,
+                company_uuid: contract_body_data.company_uuid,
                 secret: crypto.encrypt(contract_secret), // 접근인증번호도 string 형식으로 저장됨
                 contract_uuid: contract_uuid, // uuid는 제외
                 company_name: crypto.encrypt(contract_body_data.company_name),
@@ -315,11 +398,11 @@ module.exports = {
         }
     },
     confirm: async function (req, res) {
-        if (!req.isAuth || req.body.code == undefined || req.body.contract_uuid == undefined) {
-            // 로그인 필수
-            res.status(401);
-            return res.json({ message: "요청을 처리하는 중 오류가 발생하였습니다." });
-        }
+        // if (!req.isAuth || req.body.code == undefined || req.body.contract_uuid == undefined) {
+        //     // 로그인 필수
+        //     res.status(401);
+        //     return res.json({ message: "요청을 처리하는 중 오류가 발생하였습니다." });
+        // }
         //req.params.contract_uuid
         if(req.body.choice == true){
             Store.update({isConfirmed: true}, {where:{contract_uuid: req.params.contract_uuid}})

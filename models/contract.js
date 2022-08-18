@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             primaryKey: true
         },
+        company_uuid: DataTypes.TEXT,
         secret: DataTypes.TEXT,
         company_name: DataTypes.TEXT,
         ceo_name: DataTypes.TEXT,
@@ -68,6 +69,9 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.BOOLEAN,
             defaultValue: false,
         },
+        worker_sign_data_url: DataTypes.TEXT,
+        worker_uuid: DataTypes.TEXT,
+        owner_uuid: DataTypes.TEXT,
     }, {
         sequelize,
         modelName: 'Contract',

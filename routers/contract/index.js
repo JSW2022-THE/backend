@@ -49,4 +49,6 @@ contractRouter.post("/search", contractController.getContract);
 */
 contractRouter.post("/confirm/:contract_uuid", contractController.confirm);
 
+contractRouter.post("/confirm_ok", contractController.confirmContract)
+
 module.exports = contractRouter;
